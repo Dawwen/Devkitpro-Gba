@@ -8,10 +8,10 @@
 #define KEY_DOWN 0x0080
 #define KEY_ANY  0x03FF
 
-void set_compteur(volatile obj_attrs **compteur,int value)
+void set_compteur(t_scoreboard compteur,int value)
 {
-	compteur[0]->attr2 = 1 + value/10;
-	compteur[1]->attr2 = 1 + value%10;
+	compteur.first_digit->attr2 = 1 + value/10;
+	compteur.second_digit->attr2 = 1 + value%10;
 }
 
 int main(void)
@@ -28,9 +28,14 @@ int main(void)
 	volatile uint16 *paddle_tile_mem = (uint16 *)tile_mem[4][11];
 	int	i;
 
+	t_scoreboard score;
+	score.first_digit = &oam_mem[0];
+	score.second_digit = &oam_mem[1];
+
 	#include "diamond.data"
+
 	for (i = 0; i < 4 * (sizeof(tile_4bpp) / 2); ++i)
-		paddle_tile_mem[i] = 0x2222; // 0b_0002_0001_0002_0001
+		paddle_tile_mem[i] = 0x2222; // 0b_0002_0002_0002_0002
 	for (i = 0; i < 10 * (sizeof(tile_4bpp) / 2); ++i)
 		compteur_tile_mem[i] = num[i/16][i%16];
 
@@ -42,27 +47,29 @@ int main(void)
 	object_palette_mem[4] = RGB15(0x01, 0x01, 0x01); // Black
 	// Create our sprites by writing their object attributes into OAM
 	// memory
-	volatile obj_attrs *paddle_attrs = &oam_mem[0];
+
+	//volatile obj_attrs *compteur_1_attrs = &oam_mem[1];
+	score.first_digit->attr0 = 0; // 4bpp tiles, SQUARE shape
+	score.first_digit->attr1 = 0; // 8x8 size when using the SQUARE shape
+	score.first_digit->attr2 = 1; // Start at the fifth tile in tile block four,
+	                       // use color palette zero
+
+	//volatile obj_attrs *compteur_2_attrs = &oam_mem[2];
+   	score.second_digit->attr0 = 0; // 4bpp tiles, SQUARE shape
+   	score.second_digit->attr1 = 0; // 8x8 size when using the SQUARE shape
+   	score.second_digit->attr2 = 1; // Start at the fifth tile in tile block four,
+					   	                       // use color palette zero
+
+	volatile obj_attrs *paddle_attrs = &oam_mem[2];
 	paddle_attrs->attr0 = 0x8000; // 4bpp tiles, TALL shape
 	paddle_attrs->attr1 = 0x4000; // 8x32 size when using the TALL shape
 	paddle_attrs->attr2 = 11;      // Start at the first tile in tile
-	                              // block four, use color palette zero
-	volatile obj_attrs *compteur_1_attrs = &oam_mem[1];
-	compteur_1_attrs->attr0 = 0; // 4bpp tiles, SQUARE shape
-	compteur_1_attrs->attr1 = 0; // 8x8 size when using the SQUARE shape
-	compteur_1_attrs->attr2 = 1; // Start at the fifth tile in tile block four,
-	                       // use color palette zero
-
-	volatile obj_attrs *compteur_2_attrs = &oam_mem[2];
-   	compteur_2_attrs->attr0 = 0; // 4bpp tiles, SQUARE shape
-   	compteur_2_attrs->attr1 = 0; // 8x8 size when using the SQUARE shape
-   	compteur_2_attrs->attr2 = 1; // Start at the fifth tile in tile block four,
-					   	                       // use color palette zero
+											   // block four, use color palette zero
 
 	set_object_position(paddle_attrs, 64, 64);
-	set_object_position(compteur_1_attrs, 0, 0);
-	set_object_position(compteur_2_attrs, 8, 0);
-	volatile obj_attrs *compteur[2] = {compteur_1_attrs,compteur_2_attrs};
+	set_object_position(score.first_digit, 0, 0);
+	set_object_position(score.second_digit, 8, 0);
+
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
 	REG_DISPLAY = 0x1000 | 0x0040;
@@ -89,7 +96,7 @@ int main(void)
 				i = 1;
 			}
 		}
-		set_compteur(compteur, i);
+		set_compteur(score, i);
 	}
 	return 0;
 }
