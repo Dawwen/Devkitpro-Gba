@@ -6,6 +6,9 @@
 #define MEM_VRAM 0x06000000
 #define MEM_OAM  0x07000000
 
+#define DISP_MODE_0		0x0000
+#define DISP_OBJ_MEM	0x1000
+#define DISP_1D_SPRITE	0x0040
 
 #define REG_DISPLAY        (*((volatile uint32 *)(MEM_IO)))
 #define REG_DISPLAY_VCOUNT (*((volatile uint32 *)(MEM_IO + 0x0006)))

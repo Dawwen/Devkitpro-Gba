@@ -26,6 +26,7 @@ int main(void)
 	// VRAM doesn't support byte-granular writes).
 	volatile uint16 *compteur_tile_mem   = (uint16 *)tile_mem[4][1];
 	volatile uint16 *paddle_tile_mem = (uint16 *)tile_mem[4][11];
+
 	int	i;
 
 	t_scoreboard score;
@@ -34,17 +35,20 @@ int main(void)
 
 	#include "diamond.data"
 
-	for (i = 0; i < 4 * (sizeof(tile_4bpp) / 2); ++i)
-		paddle_tile_mem[i] = 0x2222; // 0b_0002_0002_0002_0002
+	for (i = 0; i < 356 * (sizeof(tile_4bpp) / 2); ++i)
+		paddle_tile_mem[i] = perso[i/64][i%64]; // 0b_0002_0002_0002_0002
 	for (i = 0; i < 10 * (sizeof(tile_4bpp) / 2); ++i)
 		compteur_tile_mem[i] = num[i/16][i%16];
+	//for (i = 0; i < 1 * (sizeof(tile_4bpp) / 2); ++i)
+	//	background_tile_mem[i] = diamond[i]
 
 	// Write the colour palette for our sprites into the first palette of
 	// 16 colours in colour palette memory (this palette has index 0)
-	object_palette_mem[1] = RGB15(0x00, 0x00, 0x1F); // Blue
-	object_palette_mem[3] = RGB15(0x1F, 0x00, 0x00); // Red
+	object_palette_mem[1] = RGB15(0x00, 0x00, 0x00); // Black
 	object_palette_mem[2] = RGB15(0x1F, 0x1F, 0x1F); // White
-	object_palette_mem[4] = RGB15(0x01, 0x01, 0x01); // Black
+	object_palette_mem[3] = RGB15(0x1F, 0x00, 0x00); // Red
+	object_palette_mem[4] = RGB15(0x00, 0x00, 0x1F); // Blue
+	object_palette_mem[5] = RGB15(0x00, 0x1F, 0x00); // Green
 	// Create our sprites by writing their object attributes into OAM
 	// memory
 
@@ -61,7 +65,7 @@ int main(void)
 					   	                       // use color palette zero
 
 	volatile obj_attrs *paddle_attrs = &oam_mem[2];
-	paddle_attrs->attr0 = 0x8000; // 4bpp tiles, TALL shape
+	paddle_attrs->attr0 = 0x0000; // 4bpp tiles, TALL shape
 	paddle_attrs->attr1 = 0x4000; // 8x32 size when using the TALL shape
 	paddle_attrs->attr2 = 11;      // Start at the first tile in tile
 											   // block four, use color palette zero
@@ -72,11 +76,11 @@ int main(void)
 
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
-	REG_DISPLAY = 0x1000 | 0x0040;
+	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_1D_SPRITE ;
 
 	// The main game loop
 	uint32 key_states = 0;
-	i = 1;
+	i = 0;
 	while (1)
 	{
 		// Skip past the rest of any current V-Blank, then skip past
@@ -93,7 +97,7 @@ int main(void)
 			i++;
 			if (i == 100)
 			{
-				i = 1;
+				i = 0;
 			}
 		}
 		set_compteur(score, i);
