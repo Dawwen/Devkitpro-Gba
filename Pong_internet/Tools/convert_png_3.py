@@ -16,15 +16,29 @@ def conv_8_5( v ):
 def pixel_to_palet(pixel) :
 
 	if pixel == (0,0,0):
-		res = 1
+		res = "1"
 	elif pixel == (255,255,255):
-		res = 2
+		res = "2"
 	elif pixel == (255,0,0):
-		res = 3
+		res = "3"
 	elif pixel == (0,0,255):
-		res = 4
+		res = "4"
 	elif pixel == (0,255,0):
-		res = 5
+		res = "5"
+	elif pixel == (195,195,195):
+		res = "6"
+	elif pixel == (127,127,127):
+		res = "7"
+	elif pixel == (237,28,36):
+		res = "8"
+	elif pixel == (34,177,76):
+		res = "9"
+	elif pixel == (255,127,39):
+		res = 'A'
+	elif pixel == (181,230,29):
+		res = 'B'
+	elif pixel == (255,242,0):
+		res = "C"
 	return res
 
 def convert_image( filename ):
@@ -47,7 +61,7 @@ def convert_image( filename ):
 						out.write("0x")
 						for k in range(3,-1,-1):
 							pixel = pixel_to_palet(i.getpixel((x+k,y)))
-							out.write(str(pixel))
+							out.write(pixel)
 						out.write(",")
 					out.write("\n")
 				if (y_sq != height/8-1 or x_sq != height/8-1):

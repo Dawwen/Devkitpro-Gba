@@ -14,7 +14,7 @@ typedef tile_4bpp tile_block[512];
 #define oam_mem            ((volatile obj_attrs *)MEM_OAM)
 #define tile_mem           ((volatile tile_block *)MEM_VRAM)
 #define object_palette_mem ((volatile rgb15 *)(MEM_PAL + 0x200))
-
+//#define bg0_palette_mem		((volatile rgb15 *)(MEM_PAL + 0x200))
 
 // Set the position of an object to specified x and y coordinates
 static inline void set_object_position(volatile obj_attrs *object, int x,

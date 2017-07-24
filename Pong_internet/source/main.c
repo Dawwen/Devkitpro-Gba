@@ -26,6 +26,7 @@ int main(void)
 	// VRAM doesn't support byte-granular writes).
 	volatile uint16 *compteur_tile_mem   = (uint16 *)tile_mem[4][1];
 	volatile uint16 *paddle_tile_mem = (uint16 *)tile_mem[4][11];
+	volatile uint16 *background_tile_mem = (uint16 *)tile_mem[0][1];
 
 	int	i;
 
@@ -36,9 +37,11 @@ int main(void)
 	#include "diamond.data"
 
 	for (i = 0; i < 356 * (sizeof(tile_4bpp) / 2); ++i)
-		paddle_tile_mem[i] = perso[i/64][i%64]; // 0b_0002_0002_0002_0002
+		paddle_tile_mem[i] = perso[i/64][i%64];
 	for (i = 0; i < 10 * (sizeof(tile_4bpp) / 2); ++i)
 		compteur_tile_mem[i] = num[i/16][i%16];
+	for (i = 0; i < 10 * (sizeof(tile_4bpp) / 2); ++i)
+		background_tile_mem[i] = num[i/16][i%16];
 	//for (i = 0; i < 1 * (sizeof(tile_4bpp) / 2); ++i)
 	//	background_tile_mem[i] = diamond[i]
 
@@ -49,6 +52,13 @@ int main(void)
 	object_palette_mem[3] = RGB15(0x1F, 0x00, 0x00); // Red
 	object_palette_mem[4] = RGB15(0x00, 0x00, 0x1F); // Blue
 	object_palette_mem[5] = RGB15(0x00, 0x1F, 0x00); // Green
+	object_palette_mem[6] = RGB15(24, 24, 24);
+	object_palette_mem[7] = RGB15(15, 15, 15);
+	object_palette_mem[8] = RGB15(29, 3, 4);
+	object_palette_mem[9] = RGB15(4, 22, 9);
+	object_palette_mem[10] = RGB15(31, 15, 4);
+	object_palette_mem[11] = RGB15(22, 28, 3);
+	object_palette_mem[12] = RGB15(31, 30, 0);
 	// Create our sprites by writing their object attributes into OAM
 	// memory
 
@@ -71,13 +81,13 @@ int main(void)
 											   // block four, use color palette zero
 
 	set_object_position(paddle_attrs, 64, 64);
-	set_object_position(score.first_digit, 0, 0);
-	set_object_position(score.second_digit, 8, 0);
+	set_object_position(score.first_digit, 48, 64);
+	set_object_position(score.second_digit, 56, 64);
 
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
-	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_1D_SPRITE ;
-
+	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_BG0 | DISP_1D_SPRITE ;
+	//REG_BG0CNT = 0x0083;
 	// The main game loop
 	uint32 key_states = 0;
 	i = 0;
@@ -91,7 +101,7 @@ int main(void)
 		// Get current key states (REG_KEY_INPUT stores the states
 		// inverted)
 		key_states = ~REG_KEY_INPUT & KEY_ANY;
-
+		paddle_attrs->attr2 = 11 +(i%4)*4;
 		if (key_states & KEY_UP)
 		{
 			i++;
