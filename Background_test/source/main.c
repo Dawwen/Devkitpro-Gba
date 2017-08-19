@@ -116,7 +116,7 @@ void setup_background() {
     }
 
     /* load the image into char block 0 (16 bits at a time) */
-    volatile unsigned short* dest = char_block(0);
+    volatile unsigned short* dest = char_block(1);
     unsigned short* image = (unsigned short*) background_data;
     for (int i = 0; i < ((background_width * background_height) / 2); i++) {
         dest[i] = image[i];
@@ -124,7 +124,7 @@ void setup_background() {
 
     /* set all control the bits in this register */
     *bg0_control = 0 |    /* priority, 0 is highest, 3 is lowest */
-        (0 << 2)  |       /* the char block the image data is stored in */
+        (1 << 2)  |       /* the char block the image data is stored in */
         (0 << 6)  |       /* the mosaic flag */
         (1 << 7)  |       /* color mode, 0 is 16 colors, 1 is 256 colors */
         (16 << 8) |       /* the screen block the tile data is stored in */

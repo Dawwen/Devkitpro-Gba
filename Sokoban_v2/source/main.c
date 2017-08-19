@@ -1,5 +1,4 @@
 #include "toolbox.h"
-#include "object.h"
 #include "video.h"
 
 #define REG_KEY_INPUT      (*((volatile uint32 *)(MEM_IO + 0x0130)))
@@ -86,18 +85,26 @@ int main(void)
 
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
+
+	set_compteur(score, 2);
+	//ajout
+	setup_background();
+
 	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_BG0 | DISP_1D_SPRITE ;
 	//REG_BG0CNT = 0x0083;
+
 	// The main game loop
 	uint32 key_states = 0;
-	i = 0;
+	i = 1;
+
 	while (1)
 	{
 		// Skip past the rest of any current V-Blank, then skip past
 		// the V-Draw
-		while(REG_DISPLAY_VCOUNT >= 160);
-		while(REG_DISPLAY_VCOUNT <  160);
-
+		//while(REG_DISPLAY_VCOUNT >= 160);
+		//while(REG_DISPLAY_VCOUNT <  160);
+		wait_vblank();
+		
 		// Get current key states (REG_KEY_INPUT stores the states
 		// inverted)
 		key_states = ~REG_KEY_INPUT & KEY_ANY;
@@ -110,6 +117,8 @@ int main(void)
 				i = 0;
 			}
 		}
+		//if (key_states & KEY_DOWN)
+
 		set_compteur(score, i);
 	}
 	return 0;
