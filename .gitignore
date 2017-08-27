@@ -1,4 +1,5 @@
 *.elf
 *.gba
+*.bit
 
 build

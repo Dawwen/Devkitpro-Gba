@@ -79,7 +79,7 @@ def convert_rgb_to_hexa(RGB):
 	return "%04x" % value;
 
 def output_palet(test):
-	out = open("palet.data", "w")
+	out = open("palet.bit", "w")
 	out.write("const vuint16 player_palet[13] = \n{")
 	for i in range(15):
 		if i%2 == 0:
