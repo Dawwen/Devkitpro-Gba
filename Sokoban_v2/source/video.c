@@ -75,7 +75,7 @@ void setup_palet(vuint16* palet_memory, const vuint16* palet, int size, int star
     /* load the palette from the image into palette memory*/
     for (int i = start; i < size + start; i++)
     {
-        palet_memory[i] = palet[i];
+        palet_memory[i] = palet[i-start];
     }
 }
 

@@ -61,7 +61,7 @@ def convert_image( filename,test ):
 						out.write("0x")
 						for k in range(3,-1,-1):
 							pixel = test.pixel_to_palet(i.getpixel((x+k,y)))
-							out.write(str(pixel))
+							out.write(str(pixel+1))
 						out.write(",")
 					out.write("\n")
 				if (y_sq != height/8-1 or x_sq != height/8-1):
