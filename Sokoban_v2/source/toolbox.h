@@ -19,6 +19,9 @@
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
 typedef unsigned int   uint32;
+typedef volatile unsigned char  vuint8;
+typedef volatile unsigned short vuint16;
+typedef volatile unsigned int   vuint32;
 
 // Clamp 'value' in the range 'min' to 'max' (inclusive)
 static inline int clamp(int value, int min, int max)

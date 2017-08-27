@@ -18,12 +18,12 @@ typedef tile_4bpp tile_block[512];
 
 // Set the position of an object to specified x and y coordinates
 static inline void set_object_position(volatile obj_attrs *object, int x,
-                                       int y)
+										int y)
 {
 	object->attr0 = (object->attr0 & ~OBJECT_ATTR0_Y_MASK) |
-	                (y & OBJECT_ATTR0_Y_MASK);
+					(y & OBJECT_ATTR0_Y_MASK);
 	object->attr1 = (object->attr1 & ~OBJECT_ATTR1_X_MASK) |
-	                (x & OBJECT_ATTR1_X_MASK);
+					(x & OBJECT_ATTR1_X_MASK);
 }
 
 
@@ -44,3 +44,8 @@ static inline rgb15 RGB15(int r, int g, int b)
 {
 	return r | (g << 5) | (b << 10);
 }
+
+void wait_vblank(void);
+void setup_background(void);
+void setup_palet(vuint16* palet_memory, const vuint16* palet, int size, int start);
+void setup_game_palet(void);

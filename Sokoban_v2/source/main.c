@@ -44,20 +44,6 @@ int main(void)
 	//for (i = 0; i < 1 * (sizeof(tile_4bpp) / 2); ++i)
 	//	background_tile_mem[i] = diamond[i]
 
-	// Write the colour palette for our sprites into the first palette of
-	// 16 colours in colour palette memory (this palette has index 0)
-	object_palette_mem[1] = RGB15(0x00, 0x00, 0x00); // Black
-	object_palette_mem[2] = RGB15(0x1F, 0x1F, 0x1F); // White
-	object_palette_mem[3] = RGB15(0x1F, 0x00, 0x00); // Red
-	object_palette_mem[4] = RGB15(0x00, 0x00, 0x1F); // Blue
-	object_palette_mem[5] = RGB15(0x00, 0x1F, 0x00); // Green
-	object_palette_mem[6] = RGB15(24, 24, 24);
-	object_palette_mem[7] = RGB15(15, 15, 15);
-	object_palette_mem[8] = RGB15(29, 3, 4);
-	object_palette_mem[9] = RGB15(4, 22, 9);
-	object_palette_mem[10] = RGB15(31, 15, 4);
-	object_palette_mem[11] = RGB15(22, 28, 3);
-	object_palette_mem[12] = RGB15(31, 30, 0);
 	// Create our sprites by writing their object attributes into OAM
 	// memory
 
@@ -79,9 +65,9 @@ int main(void)
 	paddle_attrs->attr2 = 11;      // Start at the first tile in tile
 											   // block four, use color palette zero
 
-	set_object_position(paddle_attrs, 64, 64);
-	set_object_position(score.first_digit, 48, 64);
-	set_object_position(score.second_digit, 56, 64);
+	set_object_position(paddle_attrs, 64, 32);
+	set_object_position(score.first_digit, 48, 32);
+	set_object_position(score.second_digit, 56, 32);
 
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
@@ -89,6 +75,7 @@ int main(void)
 	set_compteur(score, 2);
 	//ajout
 	setup_background();
+	setup_game_palet();
 
 	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_BG0 | DISP_1D_SPRITE ;
 	//REG_BG0CNT = 0x0083;
@@ -104,7 +91,7 @@ int main(void)
 		//while(REG_DISPLAY_VCOUNT >= 160);
 		//while(REG_DISPLAY_VCOUNT <  160);
 		wait_vblank();
-		
+
 		// Get current key states (REG_KEY_INPUT stores the states
 		// inverted)
 		key_states = ~REG_KEY_INPUT & KEY_ANY;

@@ -1,8 +1,3 @@
-'''
-Created on 9 aout 2015
-
-@author: didier
-'''
 
 from PIL import Image
 import glob
@@ -13,35 +8,40 @@ _2_8 = 2 ** 8
 def conv_8_5( v ):
 	return int( ( v * _2_5 ) / _2_8 )
 
-def pixel_to_palet(pixel) :
+def convert(pixel):
+	return([int(pixel[0]*2**(5-8)),int(pixel[1]*2**(5-8)),int(pixel[2]*2**(5-8))])
 
-	if pixel == (0,0,0):
-		res = "1"
-	elif pixel == (255,255,255):
-		res = "2"
-	elif pixel == (255,0,0):
-		res = "3"
-	elif pixel == (0,0,255):
-		res = "4"
-	elif pixel == (0,255,0):
-		res = "5"
-	elif pixel == (195,195,195):
-		res = "6"
-	elif pixel == (127,127,127):
-		res = "7"
-	elif pixel == (237,28,36):
-		res = "8"
-	elif pixel == (34,177,76):
-		res = "9"
-	elif pixel == (255,127,39):
-		res = 'A'
-	elif pixel == (181,230,29):
-		res = 'B'
-	elif pixel == (255,242,0):
-		res = "C"
-	return res
+class palet:
+	"Une classe pour les palet de 16 couleur"
 
-def convert_image( filename ):
+	def __init__(self):
+		self.palet = [[0,0,0] for i in range(15)]
+		self.used_color = 0
+
+	def pixel_in_palet(self,pixel):
+		for i in range(self.used_color):
+			color = self.palet[i]
+			if pixel[0] == color[0] and pixel[1] == color[1] and pixel[2] == color[2]:
+				return(i)
+		return(-1)
+
+	def add_to_palet(self,pixel):
+		value = []
+		for i in range(3):
+			value.append(pixel[i])
+		self.palet[self.used_color] = value
+		self.used_color += 1
+
+	def pixel_to_palet(self, pixel):
+		pixel = convert(pixel)
+		for i in range(self.used_color):
+			value = self.pixel_in_palet(pixel)
+			if value >= 0 :
+				return(value)
+		self.add_to_palet(pixel)
+		return(self.used_color)
+
+def convert_image( filename,test ):
 	i = Image.open(filename).convert("RGB")
 	width, height = i.size
 	nb_tiles = (width*height)/8*8
@@ -60,8 +60,8 @@ def convert_image( filename ):
 					for x in range(j*height + x_sq*8,j*height + (x_sq+1)*8, 4):
 						out.write("0x")
 						for k in range(3,-1,-1):
-							pixel = pixel_to_palet(i.getpixel((x+k,y)))
-							out.write(pixel)
+							pixel = test.pixel_to_palet(i.getpixel((x+k,y)))
+							out.write(str(pixel))
 						out.write(",")
 					out.write("\n")
 				if (y_sq != height/8-1 or x_sq != height/8-1):
@@ -73,7 +73,26 @@ def convert_image( filename ):
 	out.write("}")
 	out.close()
 
+def convert_rgb_to_hexa(RGB):
+	r,g,b = RGB
+	value = (b << 10) | (g << 5) | r
+	return "%04x" % value;
+
+def output_palet(test):
+	out = open("palet.data", "w")
+	out.write("const vuint16 player_palet[13] = \n{")
+	for i in range(15):
+		if i%2 == 0:
+			out.write("\n\t\t")
+		out.write("0x")
+		out.write(convert_rgb_to_hexa(test.palet[i]))
+		if i != 14:
+			out.write(",")
+	out.write("\n}")
+
 if __name__ == '__main__':
+	test = palet()
 	for f in glob.glob( "Sprite/*.bmp") :
 		print(f)
-		convert_image(f)
+		convert_image(f,test)
+	output_palet(test)
