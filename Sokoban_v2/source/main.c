@@ -15,28 +15,6 @@
 #define KEY_L       0x0200
 #define KEY_ANY  0x03FF
 
-void set_compteur(t_scoreboard compteur,int value)
-{
-	compteur.first_digit->attr2 = 1 + value/100;
-	compteur.second_digit->attr2 = 1 + (value/10) % 10;
-	compteur.third_digit->attr2 = 1 + value%10;
-}
-
-void setup_scoreboard(t_scoreboard score ,int x ,int y ,int obj_used)
-{
-	score.first_digit = &oam_mem[obj_used + 0];
-	score.second_digit = &oam_mem[obj_used + 1];
-	score.third_digit = &oam_mem[obj_used + 2];
-
-	setup_digit_att(score.first_digit);
-	setup_digit_att(score.second_digit);
-	setup_digit_att(score.third_digit);
-
-	set_object_position(score.first_digit, x, y);
-	set_object_position(score.second_digit, x + 8, y);
-	set_object_position(score.third_digit, x + 16, y);
-}
-
 int main(void)
 {
 	// Write the tiles for our sprites into the fourth tile block in VRAM.
@@ -52,16 +30,13 @@ int main(void)
 	volatile uint16 *background_tile_mem = (uint16 *)tile_mem[0][1];
 
 	int	i;
+	int obj_used;
 
-	t_scoreboard x_coord,score;
-	t_scoreboard y_coord;
+	t_scoreboard x_coord, y_coord;
 
-	setup_scoreboard(x_coord,0,0,0);
-	//setup_scoreboard(y_coord,0,16,3);
-
-	score.first_digit = &oam_mem[7];
-	score.second_digit = &oam_mem[8];
-	score.third_digit = &oam_mem[9];
+	obj_used = 0;
+	setup_scoreboard(&x_coord,0,0,&obj_used);
+	setup_scoreboard(&y_coord,0,16,&obj_used);
 
 	#include "diamond.data"
 
@@ -74,12 +49,6 @@ int main(void)
 	//for (i = 0; i < 1 * (sizeof(tile_4bpp) / 2); ++i)
 	//	background_tile_mem[i] = diamond[i]
 
-	// Create our sprites by writing their object attributes into OAM
-	// memory
-	setup_digit_att(score.first_digit);
-	setup_digit_att(score.second_digit);
-	setup_digit_att(score.third_digit);
-
 	volatile obj_attrs *paddle_attrs = &oam_mem[6];
 	paddle_attrs->attr0 = 0x0000; // 4bpp tiles, TALL shape
 	paddle_attrs->attr1 = 0x4000; // 8x32 size when using the TALL shape
@@ -87,15 +56,10 @@ int main(void)
 											   // block four, use color palette zero
 
 	set_object_position(paddle_attrs, 8, 64);
-	set_object_position(score.first_digit, 0, 16);
-	set_object_position(score.second_digit, 8, 16);
-	set_object_position(score.third_digit, 16, 16);
 
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
 
-	set_compteur(x_coord, 2);
-	//set_compteur(y_coord, 3);
 	//ajout
 	setup_background();
 	setup_game_palet();
@@ -137,7 +101,7 @@ int main(void)
 		if (key_states & KEY_LEFT)
 		{
 		d++;
-		if (d >= 200)
+		if (d >= 60)
 			{
 				d = 0;
 				x--;
@@ -146,7 +110,7 @@ int main(void)
 		if (key_states & KEY_RIGHT)
 		{
 			c++;
-			if (c >= 200)
+			if (c >= 10)
 			{
 				c = 0;
 				x++;
@@ -155,7 +119,6 @@ int main(void)
 
 		set_object_position(paddle_attrs, x, y);
 		set_compteur(x_coord, x);
-		set_compteur(score, x);
 	}
 	return 0;
 }

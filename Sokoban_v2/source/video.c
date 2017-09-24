@@ -36,11 +36,34 @@ void setup_digit_att(volatile obj_attrs *digit)
 	digit->attr2 = 1; // Start at the fifth tile in tile block four,
 					  // use color palette zero
 }
+void set_compteur(t_scoreboard compteur,int value)
+{
+	compteur.first_digit->attr2 = 1 + value/100;
+	compteur.second_digit->attr2 = 1 + (value/10) % 10;
+	compteur.third_digit->attr2 = 1 + value%10;
+}
+
+void setup_scoreboard(t_scoreboard *score ,int x ,int y ,int *obj_used)
+{
+	score->first_digit = &oam_mem[*obj_used + 0];
+	score->second_digit = &oam_mem[*obj_used + 1];
+	score->third_digit = &oam_mem[*obj_used + 2];
+
+	setup_digit_att(score->first_digit);
+	setup_digit_att(score->second_digit);
+	setup_digit_att(score->third_digit);
+
+	set_object_position(score->first_digit, x, y);
+	set_object_position(score->second_digit, x + 8, y);
+	set_object_position(score->third_digit, x + 16, y);
+	*obj_used += 3;
+}
 
 /* wait for the screen to be fully drawn so we can do something during vblank */
 void wait_vblank( ) {
     /* wait until all 160 lines have been updated */
-    while (*scanline_counter < 160) { }
+	while (*scanline_counter >= 160);
+    while (*scanline_counter < 160);
 }
 
 /* return a pointer to one of the 4 character blocks (0-3) */

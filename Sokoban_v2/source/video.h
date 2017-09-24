@@ -47,6 +47,8 @@ static inline rgb15 RGB15(int r, int g, int b)
 }
 
 void setup_digit_att(volatile obj_attrs *digit);
+void set_compteur(t_scoreboard compteur,int value);
+void setup_scoreboard(t_scoreboard *score ,int x ,int y ,int *obj_used);
 void wait_vblank(void);
 void setup_background(void);
 void setup_palet(vuint16* palet_memory, const vuint16* palet, int size, int start);
