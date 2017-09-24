@@ -28,6 +28,15 @@ const vuint16 player_palet[15] =
 		0x0000
 };
 
+void setup_digit_att(volatile obj_attrs *digit)
+{
+	//volatile obj_attrs *compteur_1_attrs = &oam_mem[1];
+	digit->attr0 = 0; // 4bpp tiles, SQUARE shape
+	digit->attr1 = 0; // 8x8 size when using the SQUARE shape
+	digit->attr2 = 1; // Start at the fifth tile in tile block four,
+					  // use color palette zero
+}
+
 /* wait for the screen to be fully drawn so we can do something during vblank */
 void wait_vblank( ) {
     /* wait until all 160 lines have been updated */

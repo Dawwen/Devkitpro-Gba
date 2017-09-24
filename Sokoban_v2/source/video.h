@@ -35,6 +35,7 @@ struct s_scoreboard
 {
 	volatile obj_attrs *first_digit;
 	volatile obj_attrs *second_digit;
+	volatile obj_attrs *third_digit;
 };
 
 typedef struct s_scoreboard t_scoreboard;
@@ -45,6 +46,7 @@ static inline rgb15 RGB15(int r, int g, int b)
 	return r | (g << 5) | (b << 10);
 }
 
+void setup_digit_att(volatile obj_attrs *digit);
 void wait_vblank(void);
 void setup_background(void);
 void setup_palet(vuint16* palet_memory, const vuint16* palet, int size, int start);

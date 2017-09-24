@@ -3,14 +3,38 @@
 
 #define REG_KEY_INPUT      (*((volatile uint32 *)(MEM_IO + 0x0130)))
 
-#define KEY_UP   0x0040
-#define KEY_DOWN 0x0080
+#define KEY_A       0x0001
+#define KEY_B       0x0002
+#define KEY_SELECT  0x0004
+#define KEY_START   0x0008
+#define KEY_RIGHT	0x0010
+#define KEY_LEFT    0x0020
+#define KEY_UP      0x0040
+#define KEY_DOWN    0x0080
+#define KEY_R       0x0100
+#define KEY_L       0x0200
 #define KEY_ANY  0x03FF
 
 void set_compteur(t_scoreboard compteur,int value)
 {
-	compteur.first_digit->attr2 = 1 + value/10;
-	compteur.second_digit->attr2 = 1 + value%10;
+	compteur.first_digit->attr2 = 1 + value/100;
+	compteur.second_digit->attr2 = 1 + (value/10) % 10;
+	compteur.third_digit->attr2 = 1 + value%10;
+}
+
+void setup_scoreboard(t_scoreboard score ,int x ,int y ,int obj_used)
+{
+	score.first_digit = &oam_mem[obj_used + 0];
+	score.second_digit = &oam_mem[obj_used + 1];
+	score.third_digit = &oam_mem[obj_used + 2];
+
+	setup_digit_att(score.first_digit);
+	setup_digit_att(score.second_digit);
+	setup_digit_att(score.third_digit);
+
+	set_object_position(score.first_digit, x, y);
+	set_object_position(score.second_digit, x + 8, y);
+	set_object_position(score.third_digit, x + 16, y);
 }
 
 int main(void)
@@ -29,9 +53,15 @@ int main(void)
 
 	int	i;
 
-	t_scoreboard score;
-	score.first_digit = &oam_mem[0];
-	score.second_digit = &oam_mem[1];
+	t_scoreboard x_coord,score;
+	t_scoreboard y_coord;
+
+	setup_scoreboard(x_coord,0,0,0);
+	//setup_scoreboard(y_coord,0,16,3);
+
+	score.first_digit = &oam_mem[7];
+	score.second_digit = &oam_mem[8];
+	score.third_digit = &oam_mem[9];
 
 	#include "diamond.data"
 
@@ -46,33 +76,26 @@ int main(void)
 
 	// Create our sprites by writing their object attributes into OAM
 	// memory
+	setup_digit_att(score.first_digit);
+	setup_digit_att(score.second_digit);
+	setup_digit_att(score.third_digit);
 
-	//volatile obj_attrs *compteur_1_attrs = &oam_mem[1];
-	score.first_digit->attr0 = 0; // 4bpp tiles, SQUARE shape
-	score.first_digit->attr1 = 0; // 8x8 size when using the SQUARE shape
-	score.first_digit->attr2 = 1; // Start at the fifth tile in tile block four,
-	                       // use color palette zero
-
-	//volatile obj_attrs *compteur_2_attrs = &oam_mem[2];
-   	score.second_digit->attr0 = 0; // 4bpp tiles, SQUARE shape
-   	score.second_digit->attr1 = 0; // 8x8 size when using the SQUARE shape
-   	score.second_digit->attr2 = 1; // Start at the fifth tile in tile block four,
-					   	                       // use color palette zero
-
-	volatile obj_attrs *paddle_attrs = &oam_mem[2];
+	volatile obj_attrs *paddle_attrs = &oam_mem[6];
 	paddle_attrs->attr0 = 0x0000; // 4bpp tiles, TALL shape
 	paddle_attrs->attr1 = 0x4000; // 8x32 size when using the TALL shape
 	paddle_attrs->attr2 = 11;      // Start at the first tile in tile
 											   // block four, use color palette zero
 
-	set_object_position(paddle_attrs, 64, 32);
-	set_object_position(score.first_digit, 48, 32);
-	set_object_position(score.second_digit, 56, 32);
+	set_object_position(paddle_attrs, 8, 64);
+	set_object_position(score.first_digit, 0, 16);
+	set_object_position(score.second_digit, 8, 16);
+	set_object_position(score.third_digit, 16, 16);
 
 	// Set the display parameters to enable objects, and use a 1D
 	// object->tile mapping
 
-	set_compteur(score, 2);
+	set_compteur(x_coord, 2);
+	//set_compteur(y_coord, 3);
 	//ajout
 	setup_background();
 	setup_game_palet();
@@ -83,6 +106,13 @@ int main(void)
 	// The main game loop
 	uint32 key_states = 0;
 	i = 1;
+	int x,y;
+	int c,d;
+
+	c = 0;
+	d = 0;
+	x = 8;
+	y = 64;
 
 	while (1)
 	{
@@ -95,7 +125,7 @@ int main(void)
 		// Get current key states (REG_KEY_INPUT stores the states
 		// inverted)
 		key_states = ~REG_KEY_INPUT & KEY_ANY;
-		paddle_attrs->attr2 = 11 +(i%4)*4;
+		//paddle_attrs->attr2 = 11 +(i%4)*4;
 		if (key_states & KEY_UP)
 		{
 			i++;
@@ -104,9 +134,28 @@ int main(void)
 				i = 0;
 			}
 		}
-		//if (key_states & KEY_DOWN)
+		if (key_states & KEY_LEFT)
+		{
+		d++;
+		if (d >= 200)
+			{
+				d = 0;
+				x--;
+			}
+		}
+		if (key_states & KEY_RIGHT)
+		{
+			c++;
+			if (c >= 200)
+			{
+				c = 0;
+				x++;
+			}
+		}
 
-		set_compteur(score, i);
+		set_object_position(paddle_attrs, x, y);
+		set_compteur(x_coord, x);
+		set_compteur(score, x);
 	}
 	return 0;
 }
