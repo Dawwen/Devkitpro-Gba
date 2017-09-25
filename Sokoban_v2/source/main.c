@@ -110,7 +110,7 @@ int main(void)
 		if (key_states & KEY_RIGHT)
 		{
 			c++;
-			if (c >= 10)
+			if (c >= 3)
 			{
 				c = 0;
 				x++;
@@ -119,6 +119,7 @@ int main(void)
 
 		set_object_position(paddle_attrs, x, y);
 		set_compteur(x_coord, x);
+		set_compteur(y_coord, y);
 	}
 	return 0;
 }

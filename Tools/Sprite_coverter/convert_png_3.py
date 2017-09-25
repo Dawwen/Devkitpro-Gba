@@ -21,8 +21,10 @@ class palet:
 	def pixel_in_palet(self,pixel):
 		for i in range(self.used_color):
 			color = self.palet[i]
+			if pixel[0] == 31 and pixel[1] == 0 and pixel[2] == 31 :
+				return(0)
 			if pixel[0] == color[0] and pixel[1] == color[1] and pixel[2] == color[2]:
-				return(i)
+				return(i+1)
 		return(-1)
 
 	def add_to_palet(self,pixel):
@@ -61,7 +63,7 @@ def convert_image( filename,test ):
 						out.write("0x")
 						for k in range(3,-1,-1):
 							pixel = test.pixel_to_palet(i.getpixel((x+k,y)))
-							out.write(str(pixel+1))
+							out.write("{0:x}".format(pixel))
 						out.write(",")
 					out.write("\n")
 				if (y_sq != height/8-1 or x_sq != height/8-1):
@@ -89,6 +91,7 @@ def output_palet(test):
 		if i != 14:
 			out.write(",")
 	out.write("\n}")
+	print(test.palet)
 
 if __name__ == '__main__':
 	test = palet()
