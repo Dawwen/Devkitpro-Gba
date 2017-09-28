@@ -15,6 +15,8 @@
 #define REG_DISPLAY_VCOUNT	(*((volatile uint32 *)(MEM_IO + 0x0006)))
 #define REG_KEY_INPUT		(*((volatile uint32 *)(MEM_IO + 0x0130)))
 #define REG_BG0CNT      	(*((volatile uint16 *)(MEM_IO+0x0008)))
+#define REG_TM0CNT			(*((volatile uint32 *)(0x04000102)))
+#define REG_TM0D			(*((volatile uint32 *)(0x04000100)))
 
 typedef unsigned char  uint8;
 typedef unsigned short uint16;
