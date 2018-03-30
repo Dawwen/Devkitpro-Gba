@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   linked_list.h                                      :+:      :+:    :+:   */
+/*   dico.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 19:39:52 by olivier           #+#    #+#             */
-/*   Updated: 2018/02/04 22:08:10 by olivier          ###   ########.fr       */
+/*   Updated: 2018/03/21 13:35:07 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LINKED_LIST_H
-#define LINKED_LIST_H
+#ifndef dico_H
+#define DICO_H
 
-#define linked_list struct Linked_list
+#define dico struct Dico
 
-struct Linked_list
+struct Dico
 {
 	int lenght;
 	void* data;
-	linked_list* next;
+	dico* next;
 };
 
-linked_list* create_node(void* data, int lenght);
-void push_back(linked_list **begin_list, void *data, int lenght);
-void push_front(linked_list **begin_list, void *data, int lenght);
-int get_data(linked_list **list, int global_index);
-void set_data(linked_list **list, int index, int value);
-void add_empty_node(linked_list** list, int lenght);
+dico* create_node(void* data, int lenght);
+void push_back(dico **begin_list, void *data, int lenght);
+void push_front(dico **begin_list, void *data, int lenght);
+int get_data(dico **list, int global_index);
+void set_data(dico **list, int index, int value);
+void add_empty_node(dico** list, int lenght);
 
 #endif

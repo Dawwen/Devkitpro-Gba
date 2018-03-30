@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/02/14 21:01:40 by olivier          ###   ########.fr       */
+/*   Updated: 2018/03/24 11:28:38 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,39 @@
 #include "video.h"
 #include "bot.h"
 
-#include "diamond.data"
 
 int main(int argc, char const *argv[])
 {
 	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_BG0 | DISP_1D_SPRITE ;
 
 
-	t_scoreboard score;
+	t_scoreboard *bo,*allu;
+	t_sprite	*fiole,*test,*blank1,*blank2;
 	int obj_used= 0;
-	int i;
-	volatile uint16 *compteur_tile_mem   = (uint16 *)tile_mem[4][1];
-	volatile uint16 *perso_tile_mem   = (uint16 *)tile_mem[4][11];
+	int x = 24;
+
+	setup_sprite(&test,32,32,11,&obj_used);
+	setup_sprite(&fiole,48,32,15,&obj_used);
+	setup_sprite(&blank1,32,32,19,&obj_used);
+	setup_sprite(&blank2,48,32,19,&obj_used);
+
+	setup_scoreboard(&bo,0,0,&obj_used);
+	setup_scoreboard(&allu,0,8,&obj_used);
 
 
-	setup_scoreboard(&score,0,0,&obj_used);
 	setup_game_palet();
-
-	for (i = 0; i < 10 * (sizeof(tile_4bpp) / 2); ++i)
-		compteur_tile_mem[i] = num[i/16][i%16];
+	setup_VRAM();
+	set_compteur(bo, 123);
+	set_compteur(allu, 456);
 
 	while (42)
 	{
-		set_compteur(score, bot(43));
+		set_object_position(fiole->attribute,32,32);
+		set_object_position(test->attribute,48,32);
+		wait_vblank();
+		wait_vblank();
+		set_object_position(fiole->attribute,48,32);
+		set_object_position(test->attribute,32,32);
 		wait_vblank();
 	}
 	return 0;

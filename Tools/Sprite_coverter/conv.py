@@ -37,6 +37,8 @@ class palet:
 
 	def pixel_to_palet(self, pixel):
 		pixel = convert(pixel)
+		if pixel[0] == 31 and pixel[1] == 0 and pixel[2] == 31 :
+			return(0)
 		for i in range(self.used_color):
 			value = self.pixel_in_palet(pixel)
 			if value >= 0 :
@@ -55,9 +57,10 @@ def convert_image( filename,test ):
 	out.write("}\n{\n")
 
 	for j in range(int(width / height)):
-		out.write("\t{\n")
+		#out.write("\t{\n")
 		for y_sq in range(height//8):
 			for x_sq in range(height//8):
+				out.write("\t{\n")
 				for y in range(y_sq*8,(y_sq+1)*8):
 					out.write("\t\t")
 					for x in range(j*height + x_sq*8,j*height + (x_sq+1)*8, 4):
@@ -67,13 +70,8 @@ def convert_image( filename,test ):
 							out.write("{0:x}".format(pixel))
 						out.write(",")
 					out.write("\n")
-				if (y_sq != height/8-1 or x_sq != height/8-1):
-					out.write("\n")
-		out.write("\t}")
-		if (j != width/height -1):
-			out.write(",")
-		out.write("\n")
-	out.write("}")
+				out.write("\t},\n")
+	out.write("};")
 	out.close()
 
 def convert_rgb_to_hexa(RGB):

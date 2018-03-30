@@ -6,22 +6,22 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/14 13:23:49 by olivier           #+#    #+#             */
-/*   Updated: 2018/02/14 17:14:36 by olivier          ###   ########.fr       */
+/*   Updated: 2018/03/21 13:32:12 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list.h"
+#include "dico.h"
 #include <stdlib.h>
 
 #define WIN 1
 #define LOST -1
 
-linked_list *dico=NULL;
+dico *result=NULL;
 
 int	rec(int allu, int myTurn)
 {
 	int i = 1;
-	int check = get_data(&dico,allu);
+	int check = get_data(&result,allu);
 	int value;
 
 	if (allu <= 0)
@@ -39,7 +39,7 @@ int	rec(int allu, int myTurn)
 		while (i < 4)
 		{
 			value =rec(allu-i,!myTurn);
-			set_data(&dico,allu-i,-value);
+			set_data(&result,allu-i,-value);
 			if (value == WIN)
 				return(WIN);
 			i++;
@@ -51,7 +51,7 @@ int	rec(int allu, int myTurn)
 		while (i < 4)
 		{
 			value =rec(allu-i,!myTurn);
-			set_data(&dico,allu-i,value);
+			set_data(&result,allu-i,value);
 			if (value == LOST)
 				return(LOST);
 			i++;
