@@ -6,9 +6,16 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:50:21 by olivier           #+#    #+#             */
-/*   Updated: 2018/03/21 13:52:46 by olivier          ###   ########.fr       */
+/*   Updated: 2018/04/15 13:12:04 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef	VIDEO_H
+# define VIDEO_H
+
+#include "toolbox.h"
+#include "list.h"
+#include <stdlib.h>
 
 #define OBJECT_ATTR0_Y_MASK 0x0FF
 #define OBJECT_ATTR1_X_MASK 0x1FF
@@ -73,5 +80,9 @@ void setup_scoreboard(t_scoreboard **score ,int x ,int y ,int *obj_used);
 void wait_vblank(void);
 void setup_background(void);
 void setup_palet(vuint16* palet_memory, const vuint16* palet, int size, int start);
+void list_shape(t_list *list, int x, int y);
+t_list *list_line(t_list *list, int x, int y, int max);
 void setup_game_palet(void);
 void setup_VRAM(void);
+
+#endif

@@ -6,13 +6,11 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/03/24 11:35:45 by olivier          ###   ########.fr       */
+/*   Updated: 2018/04/15 13:12:00 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "toolbox.h"
 #include "video.h"
-#include <stdlib.h>
 
 //#include "background.h"
 //#include "map.h"
@@ -170,7 +168,39 @@ void setup_palet(vuint16* palet_memory, const vuint16* palet, int size, int star
 	for (int i = start; i < size + start; i++)
 	{
 		palet_memory[i] = palet[i-start];
+	}
 }
+
+t_list *list_line(t_list *list, int x, int y, int max)
+{
+	t_sprite *sp;
+
+	int i = 0;
+	while (list && i < max)
+	{
+		sp = list->data;
+		set_object_position(sp->attribute,x + i*16,y);
+		list = list->next;
+		i = i + 1;
+	}
+	if (i >= max)
+		return(list);
+	return NULL;
+}
+
+void list_shape(t_list *list, int x, int y)
+{
+	t_list *node=list;
+	int i = 0;
+
+	while(node)
+	{
+		if (i%2 == 0)
+			node = list_line(node,x,y+i*16,7);
+		else
+			node = list_line(node,x+16,y+i*16,5);
+		i++;
+	}
 }
 
 void setup_game_palet(void)
