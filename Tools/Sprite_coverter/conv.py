@@ -12,6 +12,16 @@ def conv_8_5( v ):
 def convert(pixel):
 	return([int(pixel[0]*2**(5-8)),int(pixel[1]*2**(5-8)),int(pixel[2]*2**(5-8))])
 
+class palets:
+	"une palette contenant 16 palets de 16 couleurs"
+
+	def __init__(self):
+		self.palets = []
+		for i in range(16):
+			self.palets.append(palet())
+
+
+
 class palet:
 	"Une classe pour les palet de 16 couleur"
 
@@ -27,8 +37,8 @@ class palet:
 			if pixel[0] == color[0] and pixel[1] == color[1] and pixel[2] == color[2]:
 				return(i+1)
 		return(-1)
-
 	def add_to_palet(self,pixel):
+
 		value = []
 		for i in range(3):
 			value.append(pixel[i])
@@ -37,27 +47,41 @@ class palet:
 
 	def pixel_to_palet(self, pixel):
 		pixel = convert(pixel)
-		if pixel[0] == 31 and pixel[1] == 0 and pixel[2] == 31 :
+		if pixel[0] == 31 and pixel[1] == 0 and pixel[2] == 31 :		#pixel invisible violet
 			return(0)
 		for i in range(self.used_color):
 			value = self.pixel_in_palet(pixel)
 			if value >= 0 :
 				return(value)
-		self.add_to_palet(pixel)
-		return(self.used_color)
+		if self.used_color < 15 :
+			self.add_to_palet(pixel)
+			return(self.used_color)
+		else :
+			return(-1)
 
-def convert_image( filename,test ):
+	def copy(self,p):
+		for i in range(len(p.palet)):
+			self.palet[i] = p.palet[i]
+		self.used_color = p.used_color
+
+
+
+def convert_image(filename, p, i_palet):
+
+	p_temp = palet()	#une palette tampon
+	p_temp.copy(p)
+
 	i = Image.open(filename).convert("RGB")
 	width, height = i.size
 	nb_tiles = (width*height)/8*8
 	out = open( filename + ".bit", "w" )
 	out.write("{")
 
-	out.write("{0}, {1}".format(nb_tiles , height) )
-	out.write("}\n{\n")
-
+	out.write("{0}, {1}".format(nb_tiles , i_palet) )
+	out.write("}\t")
+	out.write("//Palet {}".format(i_palet))
+	out.write("\n{\n")
 	for j in range(int(width / height)):
-		#out.write("\t{\n")
 		for y_sq in range(height//8):
 			for x_sq in range(height//8):
 				out.write("\t{\n")
@@ -66,13 +90,19 @@ def convert_image( filename,test ):
 					for x in range(j*height + x_sq*8,j*height + (x_sq+1)*8, 4):
 						out.write("0x")
 						for k in range(3,-1,-1):
-							pixel = test.pixel_to_palet(i.getpixel((x+k,y)))
-							out.write("{0:x}".format(pixel))
+							pixel = p_temp.pixel_to_palet(i.getpixel((x+k,y)))
+							if pixel >= 0:
+								out.write("{0:x}".format(pixel))
+							else :
+								return(False)
 						out.write(",")
 					out.write("\n")
 				out.write("\t},\n")
 	out.write("};")
 	out.close()
+
+	p.copy(p_temp)	#on vide la palette tampon
+	return(True)
 
 def convert_rgb_to_hexa(RGB):
 	r,g,b = RGB
@@ -92,9 +122,17 @@ def output_palet(test):
 	out.write("\n}")
 	print(test.palet)
 
+
 if __name__ == '__main__':
-	test = palet()
-	for f in glob.glob( "Sprite/*.bmp") :
+	p = palets()
+	for f in glob.glob( "Sprite_4bpp/*.bmp") :
 		print(f)
-		convert_image(f,test)
-	output_palet(test)
+		i = 0
+		finish = False
+		while not finish and i < 16:
+			if convert_image(f,p.palets[i],i) :
+				finish = True
+			i += 1
+
+	output_palet(p.palets[0])
+	output_palet(p.palets[1])

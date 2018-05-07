@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/04/15 13:12:40 by olivier          ###   ########.fr       */
+/*   Updated: 2018/05/07 19:11:59 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,29 @@ int main(int argc, char const *argv[])
 
 
 	t_sprite	*test;
-	t_list	*sprites=NULL;
+	t_scoreboard *s;
+	t_list	*fioles=NULL,*sprites=NULL;
 	int obj_used= 0;
 	int i = 0;
 
 	setup_game_palet();
 	setup_VRAM();
+	setup_scoreboard(&s,0,0,&obj_used);
+	set_compteur(s,124);
+	setup_sprite(&test,160,32,20,-1,16,&obj_used);
+	list_push_back(&sprites,test);
 
-	while (i < 30*16)
+	while (i < 26)
 	{
-		setup_sprite(&test,i+16,0,15,&obj_used);
-		list_push_back(&sprites,test);
-		i = i + 16;
+		setup_sprite(&test,i*16+16,0,12,0,16,&obj_used);
+		list_push_back(&fioles,test);
+		i = i + 1;
 	}
 
+	list_shape(fioles,16,16);
 
 	while (42)
 	{
-		list_shape(sprites,16,16);
-		wait_vblank();
-		list_shape(sprites,128,16);
 		wait_vblank();
 	}
 	return 0;

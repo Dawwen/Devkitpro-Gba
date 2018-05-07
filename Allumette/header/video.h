@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:50:21 by olivier           #+#    #+#             */
-/*   Updated: 2018/04/15 13:12:04 by olivier          ###   ########.fr       */
+/*   Updated: 2018/05/07 19:12:49 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,6 @@ static inline void set_object_position(volatile obj_attrs *object, int x,
 
 typedef uint16 rgb15;
 
-struct s_scoreboard
-{
-	volatile obj_attrs *first_digit;
-	volatile obj_attrs *second_digit;
-	volatile obj_attrs *third_digit;
-};
-
-typedef struct s_scoreboard t_scoreboard;
 
 struct s_sprite
 {
@@ -66,15 +58,23 @@ struct s_sprite
 
 typedef struct s_sprite t_sprite;
 
+struct s_scoreboard
+{
+	t_sprite *first_digit;
+	t_sprite *second_digit;
+	t_sprite *third_digit;
+};
+
+typedef struct s_scoreboard t_scoreboard;
+
 // Form a 16-bit BGR GBA colour from three component values
 static inline rgb15 RGB15(int r, int g, int b)
 {
 	return r | (g << 5) | (b << 10);
 }
 
-void setup_digit_att(volatile obj_attrs *digit);
-void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile);
-void setup_sprite(t_sprite **sprite,int x,int y, uint16 start_tile, int *obj_used);
+void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,int size);
+void setup_sprite(t_sprite **sprite,int x,int y, uint16 start_tile, int palet, int size, int *obj_used);
 void set_compteur(t_scoreboard *compteur,int value);
 void setup_scoreboard(t_scoreboard **score ,int x ,int y ,int *obj_used);
 void wait_vblank(void);
