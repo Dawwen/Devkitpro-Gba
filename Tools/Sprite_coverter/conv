@@ -1,0 +1,176 @@
+#!/usr/bin/python3
+
+from PIL import Image
+import glob
+import re
+
+class palets:
+	"une palette contenant 16 palets de 16 couleurs"
+
+	def __init__(self):
+		self.palets = []
+		for i in range(16):
+			self.palets.append(palet())
+
+	def pixel_to_palet(self,pixel):
+		for i in range(16):
+			t = self.palets[i].pixel_to_palet(pixel)
+			if t >= 0:
+				return(i,t)
+		return(-1)
+
+
+class palet:
+	"Une classe pour les palet de 16 couleur"
+
+	def __init__(self):
+		self.palet = [[0,0,0] for i in range(15)]
+		self.used_color = 0
+
+	def pixel_in_palet(self,pixel):
+		for i in range(self.used_color):
+			color = self.palet[i]
+			if pixel[0] == 31 and pixel[1] == 0 and pixel[2] == 31 :
+				return(0)
+			if pixel[0] == color[0] and pixel[1] == color[1] and pixel[2] == color[2]:
+				return(i+1)
+		return(-1)
+	def add_to_palet(self,pixel):
+
+		value = []
+		for i in range(3):
+			value.append(pixel[i])
+		self.palet[self.used_color] = value
+		self.used_color += 1
+
+	def pixel_to_palet(self, pixel):
+		pixel = convert(pixel)
+		if pixel[0] == 31 and pixel[1] == 0 and pixel[2] == 31 :		#pixel invisible violet
+			return(0)
+		for i in range(self.used_color):
+			value = self.pixel_in_palet(pixel)
+			if value >= 0 :
+				return(value)
+		if self.used_color < 15 :
+			self.add_to_palet(pixel)
+			return(self.used_color)
+		else :
+			return(-1)
+
+	def copy(self,p):
+		for i in range(len(p.palet)):
+			self.palet[i] = p.palet[i]
+		self.used_color = p.used_color
+
+
+def convert(pixel):
+	return([int(pixel[0]*2**(5-8)),int(pixel[1]*2**(5-8)),int(pixel[2]*2**(5-8))])
+
+def palet_4bpp_convert(i, x, y, p):
+	out = "0x"
+	for k in range(3,-1,-1):
+		pixel = p.pixel_to_palet(i.getpixel((x+k,y)))
+		if pixel >= 0:
+			out = out + ("{0:x}".format(pixel))
+		else :
+			return(-1)
+	out = out + ","
+	return(out)
+
+def palet_8bpp_convert(i, x, y, p):
+	out = ""
+	for j in range(2):
+		out = out + "0x"
+		for k in range(1 + 2*j,-1 + 2*j ,-1):
+			pixel = p.pixel_to_palet(i.getpixel((x+k,y)))
+			if pixel != -1:
+				out = out + ("{0:x}{1:x}".format(pixel[0],pixel[1]))
+			else :
+				return(-1)
+		out = out + ","
+	return(out)
+
+def convert_rgb_to_hexa(RGB):
+	r,g,b = RGB
+	value = (b << 10) | (g << 5) | r
+	return "%04x" % value;
+
+def output_palet(p):
+	out = open("palet.bit", "w")
+	out.write("const vuint16 player_palet[256] = \n{")
+	for i in range(16):
+		out.write("\n\t\t0x0000,")
+		for j in range(15):
+			if j%2 == 1:
+				out.write("\n\t\t")
+			out.write("0x")
+			out.write(convert_rgb_to_hexa(p.palets[i].palet[j]))
+			if j != 14 or i != 15:
+				out.write(",")
+		if i != 15:
+			out.write("\n")
+	out.write("\n};\n")
+
+def convert_image(filename, p, i_palet):
+
+	if i_palet >= 0 :		#seulement en 4bpp
+		p_temp = palet()	#une palette tampon
+		p_temp.copy(p)
+
+	i = Image.open(filename).convert("RGB")
+	r = re.search('(.+?)/(.+?)\.bmp$', filename)
+	dire,name = r.group(1),r.group(2)
+	width, height = i.size
+	nb_tiles = (width*height)/(8*8)
+
+	out = open( dire + "/" + name + ".data", "w" )
+
+	if i_palet >= 0:
+		out.write("const uint16 {}[{}][16] =\t//Palet {}".format(name,int(nb_tiles),i_palet))
+	else:
+		out.write("const uint16 {}[{}][32] =".format(name,nb_tiles))
+
+	out.write("\n{\n")
+	for j in range(int(width / height)):
+		for y_sq in range(height//8):
+			for x_sq in range(height//8):
+				out.write("\t{\n")
+				for y in range(y_sq*8,(y_sq+1)*8):
+					out.write("\t\t")
+					for x in range(j*height + x_sq*8,j*height + (x_sq+1)*8, 4):
+						if i_palet >= 0:
+							a = palet_4bpp_convert(i,x,y,p_temp)
+						else :
+							a = palet_8bpp_convert(i,x,y,p)
+
+						if a != -1:
+							out.write(a)
+						else :
+							return(False)
+					out.write("\n")
+				out.write("\t},\n")
+	out.write("};\n")
+	out.close()
+
+	if i_palet >= 0 :		#seulement en 4bpp
+		p.copy(p_temp)		#on vide la palette tampon
+	return(True)
+
+
+
+if __name__ == '__main__':
+	p = palets()
+	for f in glob.glob( "Sprite_4bpp/*.bmp") :
+		print(f)
+		i = 0
+		finish = False
+		while not finish and i < 16:
+			if convert_image(f,p.palets[i],i) :
+				finish = True
+			i += 1
+
+	for f in glob.glob( "Sprite_8bpp/*.bmp") :
+		print(f)
+		convert_image(f,p,-1)
+
+	output_palet(p)

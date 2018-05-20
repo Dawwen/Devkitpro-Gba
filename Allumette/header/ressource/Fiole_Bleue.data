@@ -1,4 +1,4 @@
-const uint16 fiole_red[4][16] =
+const uint16 Fiole_Bleue[4][16] =	//Palet 1
 {
 	{
 		0x0000,0x0000,

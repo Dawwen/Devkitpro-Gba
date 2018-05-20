@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/05/07 19:12:21 by olivier          ###   ########.fr       */
+/*   Updated: 2018/05/17 21:27:00 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,17 @@
 //#include "background.h"
 //#include "map.h"
 #include "ressource/num.data"
-#include "ressource/fiole_blue.data"
-#include "ressource/fiole_red.data"
-#include "ressource/16.data"
+#include "ressource/Fiole_Bleue.data"
+#include "ressource/Fiole_Rouge.data"
+#include "ressource/32.data"
+
+#include "ressource/palet.bit"
 
 volatile unsigned short* bg_palette = (volatile unsigned short*) 0x5000000;
 volatile unsigned short* bg0_control = (volatile unsigned short*) 0x4000008;
 volatile unsigned short* scanline_counter = (volatile unsigned short*) 0x4000006;
 
-const vuint16 player_palet[15*2] =
+/*const vuint16 player_palet[15*2] =
 {
 		0x0000,0x463f,
 		0x109f,0x085b,
@@ -41,7 +43,7 @@ const vuint16 player_palet[15*2] =
 		0x4101,0x30c1,
 		0x0000,0x0000,
 		0x0000,0x0000
-};
+};*/
 
 
 void setup_VRAM(void)
@@ -56,17 +58,17 @@ void setup_VRAM(void)
 	}
 	for (i = 0; i < 4 * (sizeof(tile_4bpp) / 2); ++i)	//Fiole
 	{
-		*start_tile_mem = fiole_blue[i/16][i%16];
+		*start_tile_mem = Fiole_Bleue[i/16][i%16];
 		start_tile_mem++;
 	}
 	for (i = 0; i < 4 * (sizeof(tile_4bpp) / 2); ++i)	//Fiole
 	{
-		*start_tile_mem = fiole_red[i/16][i%16];
+		*start_tile_mem = Fiole_Rouge[i/16][i%16];
 		start_tile_mem++;
 	}
-	for (i = 0; i < 4*32; ++i)	//depth
+	for (i = 0; i < 16*32; ++i)	//depth
 	{
-		*start_tile_mem = depth[i];
+		*start_tile_mem = depth[i/32][i%32];
 		start_tile_mem++;
 	}
 
@@ -87,6 +89,8 @@ void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,
 	}
 	if (size == 16)
 		attribute->attr1 = 0x4000; // 16x16 size when using the SQUARE shape
+	else if (size == 32)
+		attribute->attr1 = 0x8000; // 32x32 size when using the SQUARE shape
 	else
 		attribute->attr1 = 0x0000; // 8x8 size when using the SQUARE shape
 
@@ -210,6 +214,6 @@ void list_shape(t_list *list, int x, int y)
 
 void setup_game_palet(void)
 {
-	setup_palet(object_palette_mem,player_palet,30,1);
+	setup_palet(object_palette_mem,player_palet,256,0);
 	//setup_palet(bg_palette,background_palette,256,0);
 }

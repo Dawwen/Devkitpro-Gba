@@ -15,7 +15,7 @@ void persoMoveUp(Map * map , int * xperso , int * yperso , int * direction)
 		{
 			int value ;
 			value = testColl(map , (*xperso) , (*yperso) - 1 ) ;
-		
+
 			if ( value == 0)
 			{
 				(*yperso) = (*yperso) - 1	;
@@ -24,7 +24,7 @@ void persoMoveUp(Map * map , int * xperso , int * yperso , int * direction)
 			{
 				persoPush(map ,xperso,yperso,direction);
 			}
-		}	
+		}
 
 	}
 
@@ -40,7 +40,7 @@ void persoMoveDown(Map * map , int * xperso , int * yperso , int * direction)
 		{
 			int value ;
 			value = testColl(map , (*xperso) , (*yperso) + 1 ) ;
-			
+
 			if ( value == 0)
 			{
 				(*yperso) = (*yperso) + 1	;
@@ -50,7 +50,7 @@ void persoMoveDown(Map * map , int * xperso , int * yperso , int * direction)
 				persoPush(map,xperso,yperso,direction);
 			}
 		}
-		
+
 
 	}
 
@@ -67,7 +67,7 @@ void persoMoveLeft(Map * map , int * xperso , int * yperso , int * direction)
 		{
 			int value ;
 			value = testColl(map , (*xperso) - 1 , (*yperso) ) ;
-			
+
 			if ( value == 0)
 			{
 				(*xperso) = (*xperso) - 1	;
@@ -78,7 +78,7 @@ void persoMoveLeft(Map * map , int * xperso , int * yperso , int * direction)
 			}
 
 		}
-		
+
 
 	}
 
@@ -94,7 +94,7 @@ void persoMoveRight(Map * map , int * xperso , int * yperso , int * direction)
 		{
 			int value ;
 			value = testColl(map , (*xperso) + 1 , (*yperso) ) ;
-			
+
 			if ( value == 0)
 			{
 				(*xperso) = (*xperso) + 1	;
@@ -168,6 +168,12 @@ void persoPush(Map * map , int * xperso , int * yperso , int * direction)
 				(*map) [y2][x2] = 4 ;
 				Push = 1;
 				break;
+
+			case 7 :
+				(*map) [y1][x1] = 2 ;
+				(*map) [y2][x2] = 3 ;
+				Push = 1;
+				break;
 		}
 	}
 
@@ -213,4 +219,3 @@ void persoPush(Map * map , int * xperso , int * yperso , int * direction)
 
 
 }
-

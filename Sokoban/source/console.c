@@ -14,7 +14,7 @@ int main()  {
 
     drawnIntroScreen() ;
     int comp ;
-    while(1) 
+    while(1)
     {
         key_poll()  ;
         if (key_hit(KEY_START))
@@ -28,7 +28,7 @@ int main()  {
     Carte map               ;
     initPerso(&hero)        ;
     initCarte(&map, 0, 0)         ;
-    
+
 
 
     while (1) {
@@ -37,12 +37,12 @@ int main()  {
 
         mapRefresh( &map , hero.x , hero.y ,hero.direction)            ;
 
-        while (1)   
+        while (1)
         {
             key_poll()              ;
 
-            if (key_was_down(KEY_R) && key_hit(KEY_B)) 
-            {    
+            if (key_was_down(KEY_R) && key_hit(KEY_B))
+            {
                 debug++;
                 if (debug > 1)
                 {
@@ -50,8 +50,8 @@ int main()  {
                 }
                 refresh = 1;
             }
-            if (key_hit(KEY_L) && debug == 1) 
-            {    
+            if (key_hit(KEY_L) && debug == 1)
+            {
                 nextLvl(&map.world,&map.level) ;
                 break;
             }
@@ -60,40 +60,40 @@ int main()  {
                 debugMap(&map.list ,hero.x,hero.y,hero.direction);
                 refresh = 1;
             }
-            else if (key_hit(KEY_A)) 
-            {    
+            else if (key_hit(KEY_A))
+            {
                 persoPush( &map.list , &hero.x , &hero.y , &hero.direction ) ;
                 refresh = 1 ;
                 check = 1   ;
             }
-            else if (key_hit(KEY_SELECT)) 
-            {    
+            else if (key_hit(KEY_SELECT))
+            {
                 initCarte(&map, map.world, map.level)           ;
                 spawnXY( &map.list , &hero.x , &hero.y )        ;
                 refresh = 1 ;
             }
 
 
-            else if (key_hit(KEY_UP)) 
-            {    
+            else if (key_hit(KEY_UP))
+            {
                 persoMoveUp( &map.list , &hero.x , &hero.y , &hero.direction ) ;
                 refresh = 1 ;
 		check = 1;
             }
-            else if (key_hit(KEY_DOWN)) 
-            {    
+            else if (key_hit(KEY_DOWN))
+            {
                 persoMoveDown( &map.list , &hero.x , &hero.y , &hero.direction) ;
                 refresh = 1 ;
 		check = 1;
             }
-            else if (key_hit(KEY_LEFT)) 
-            {    
+            else if (key_hit(KEY_LEFT))
+            {
                 persoMoveLeft( &map.list , &hero.x , &hero.y , &hero.direction) ;
                 refresh = 1 ;
 		check = 1;
             }
-            else if (key_hit(KEY_RIGHT)) 
-            {    
+            else if (key_hit(KEY_RIGHT))
+            {
                 persoMoveRight( &map.list , &hero.x , &hero.y , &hero.direction) ;
                 refresh = 1 ;
 		check = 1;
@@ -121,7 +121,7 @@ int main()  {
             }
             if (refresh == 1)
             {
-                refresh = 0 ;     
+                refresh = 0 ;
                 if (debug == 1)
                 {
                     drawnDebug();
@@ -132,12 +132,11 @@ int main()  {
                 }
 
                 mapRefresh( &map , hero.x , hero.y ,hero.direction)            ;
-                
+
             }
 
         }
-        
+
     };
     return 0;
 }
-
