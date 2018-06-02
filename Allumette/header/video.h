@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:50:21 by olivier           #+#    #+#             */
-/*   Updated: 2018/05/07 19:12:49 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/02 14:14:33 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 #include "toolbox.h"
 #include "list.h"
 #include <stdlib.h>
-
-#define OBJECT_ATTR0_Y_MASK 0x0FF
-#define OBJECT_ATTR1_X_MASK 0x1FF
 
 typedef struct obj_attrs {
 	uint16 attr0;
@@ -35,6 +32,15 @@ typedef tile_4bpp tile_block[512];
 #define object_palette_mem ((volatile rgb15 *)(MEM_PAL + 0x200))
 //#define bg0_palette_mem		((volatile rgb15 *)(MEM_PAL + 0x200))
 
+#define OBJECT_ATTR0_Y_MASK		0x00FF
+#define	OBJECT_ATTR0_SHAPE_MASK	0xC000
+
+#define	OBJECT_ATTR1_SIZE_MASK	0xC000
+#define OBJECT_ATTR1_X_MASK		0x01FF
+
+#define OBJECT_ATTR2_TILE_MASK	0x03FF
+#define	OBJECT_ATTR2_PALET_MASK	0xF000
+
 // Set the position of an object to specified x and y coordinates
 static inline void set_object_position(volatile obj_attrs *object, int x,
 										int y)
@@ -43,6 +49,34 @@ static inline void set_object_position(volatile obj_attrs *object, int x,
 					(y & OBJECT_ATTR0_Y_MASK);
 	object->attr1 = (object->attr1 & ~OBJECT_ATTR1_X_MASK) |
 					(x & OBJECT_ATTR1_X_MASK);
+}
+
+// Set the starting tile of an object to t
+static inline void set_object_tile(volatile obj_attrs *object, int t)
+{
+	object->attr2 = (object->attr2 & ~OBJECT_ATTR2_TILE_MASK) |
+					(t & OBJECT_ATTR2_TILE_MASK);
+}
+
+// Set object palet in 4bpp
+static inline void set_object_palet(volatile obj_attrs *object, int p)
+{
+	object->attr2 = (object->attr2 & ~OBJECT_ATTR2_PALET_MASK) |
+					(p << 12 & OBJECT_ATTR2_PALET_MASK);
+}
+
+// Set object shape
+static inline void set_object_shape(volatile obj_attrs *object, int sh)
+{
+	object->attr0 = (object->attr0 & ~OBJECT_ATTR0_SHAPE_MASK) |
+					(sh << 14 & OBJECT_ATTR0_SHAPE_MASK);
+}
+
+// Set object size
+static inline void set_object_size(volatile obj_attrs *object, int si)
+{
+	object->attr1 = (object->attr1 & ~OBJECT_ATTR1_SIZE_MASK) |
+					(si << 14 & OBJECT_ATTR1_SIZE_MASK);
 }
 
 

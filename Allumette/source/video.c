@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/05/17 21:27:00 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/01 22:48:56 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,22 @@ void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,
 	}
 	else
 	{
-		attribute->attr0 = 0x2000; // 8bpp tiles, SQUARE shape
+		attribute->attr0 = 0x2000; // 8bpp tiles, SQUARE shape 8bpp
 		attribute->attr2 = start_tile;
 	}
+	/*
 	if (size == 16)
 		attribute->attr1 = 0x4000; // 16x16 size when using the SQUARE shape
 	else if (size == 32)
 		attribute->attr1 = 0x8000; // 32x32 size when using the SQUARE shape
 	else
 		attribute->attr1 = 0x0000; // 8x8 size when using the SQUARE shape
+	*/
+	set_object_palet(attribute,palet);
+	set_object_tile(attribute,start_tile);
+	set_object_shape(attribute,0);
+	set_object_size(attribute,size);
+
 
 }
 
