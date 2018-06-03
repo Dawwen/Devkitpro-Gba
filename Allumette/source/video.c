@@ -77,6 +77,7 @@ void setup_VRAM(void)
 void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,int size)
 {
 	//volatile obj_attrs *compteur_1_attrs = &oam_mem[1];
+	/*
 	if (palet >= 0)
 	{
 		attribute->attr0 = 0x0000; // 4bpp tiles, SQUARE shape
@@ -87,7 +88,7 @@ void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,
 		attribute->attr0 = 0x2000; // 8bpp tiles, SQUARE shape 8bpp
 		attribute->attr2 = start_tile;
 	}
-	/*
+
 	if (size == 16)
 		attribute->attr1 = 0x4000; // 16x16 size when using the SQUARE shape
 	else if (size == 32)
@@ -95,10 +96,16 @@ void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,
 	else
 		attribute->attr1 = 0x0000; // 8x8 size when using the SQUARE shape
 	*/
-	set_object_palet(attribute,palet);
-	set_object_tile(attribute,start_tile);
-	set_object_shape(attribute,0);
-	set_object_size(attribute,size);
+	if (palet >= 0)
+	{
+		set_object_bpp(attribute, 0);
+		set_object_palet(attribute, palet);
+	}
+	else
+		set_object_bpp(attribute, 1);
+	set_object_tile(attribute, start_tile);
+	set_object_shape(attribute, 0);
+	set_object_size(attribute, size);
 
 
 }

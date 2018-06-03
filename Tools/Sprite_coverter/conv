@@ -128,7 +128,7 @@ def convert_image(filename, p, i_palet):
 	if i_palet >= 0:
 		out.write("const uint16 {}[{}][16] =\t//Palet {}".format(name,int(nb_tiles),i_palet))
 	else:
-		out.write("const uint16 {}[{}][32] =".format(name,nb_tiles))
+		out.write("const uint16 {}[{}][32] =".format(name,int(nb_tiles)))
 
 	out.write("\n{\n")
 	for j in range(int(width / height)):

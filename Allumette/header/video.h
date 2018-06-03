@@ -34,6 +34,8 @@ typedef tile_4bpp tile_block[512];
 
 #define OBJECT_ATTR0_Y_MASK		0x00FF
 #define	OBJECT_ATTR0_SHAPE_MASK	0xC000
+#define	OBJECT_ATTR0_MODE_MASK	0x0300
+#define OBJECT_ATTR0_COLOR_MASK	0x2000
 
 #define	OBJECT_ATTR1_SIZE_MASK	0xC000
 #define OBJECT_ATTR1_X_MASK		0x01FF
@@ -77,6 +79,20 @@ static inline void set_object_size(volatile obj_attrs *object, int si)
 {
 	object->attr1 = (object->attr1 & ~OBJECT_ATTR1_SIZE_MASK) |
 					(si << 14 & OBJECT_ATTR1_SIZE_MASK);
+}
+
+// Set mode
+static inline void set_object_mode(volatile obj_attrs *object, int mode)
+{
+	object->attr0 = (object->attr0 & ~OBJECT_ATTR0_MODE_MASK) |
+					(mode << 8 & OBJECT_ATTR0_MODE_MASK);
+}
+
+// Set color mode
+static inline void set_object_bpp(volatile obj_attrs *object, int color)
+{
+	object->attr0 = (object->attr0 & ~OBJECT_ATTR0_COLOR_MASK) |
+					(color << 13 & OBJECT_ATTR0_COLOR_MASK);
 }
 
 
