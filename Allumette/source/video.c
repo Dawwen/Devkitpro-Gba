@@ -25,26 +25,6 @@ volatile unsigned short* bg_palette = (volatile unsigned short*) 0x5000000;
 volatile unsigned short* bg0_control = (volatile unsigned short*) 0x4000008;
 volatile unsigned short* scanline_counter = (volatile unsigned short*) 0x4000006;
 
-/*const vuint16 player_palet[15*2] =
-{
-		0x0000,0x463f,
-		0x109f,0x085b,
-		0x0430,0x042c,
-		0x7fff,0x7ef1,
-		0x7e04,0x6da2,
-		0x4101,0x30c1,
-		0x0000,0x0000,
-		0x0000,
-		0x463f,
-		0x109f,0x085b,
-		0x0430,0x042c,
-		0x7fff,0x7ef1,
-		0x7e04,0x6da2,
-		0x4101,0x30c1,
-		0x0000,0x0000,
-		0x0000,0x0000
-};*/
-
 
 void setup_VRAM(void)
 {
@@ -76,26 +56,6 @@ void setup_VRAM(void)
 
 void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,int size)
 {
-	//volatile obj_attrs *compteur_1_attrs = &oam_mem[1];
-	/*
-	if (palet >= 0)
-	{
-		attribute->attr0 = 0x0000; // 4bpp tiles, SQUARE shape
-		attribute->attr2 = palet*16*16*16 + start_tile; // Start at the fifth tile in tile block four,
-	}
-	else
-	{
-		attribute->attr0 = 0x2000; // 8bpp tiles, SQUARE shape 8bpp
-		attribute->attr2 = start_tile;
-	}
-
-	if (size == 16)
-		attribute->attr1 = 0x4000; // 16x16 size when using the SQUARE shape
-	else if (size == 32)
-		attribute->attr1 = 0x8000; // 32x32 size when using the SQUARE shape
-	else
-		attribute->attr1 = 0x0000; // 8x8 size when using the SQUARE shape
-	*/
 	if (palet >= 0)
 	{
 		set_object_bpp(attribute, 0);
