@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/03 13:33:33 by olivier          ###   ########.fr       */
+/*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
+/*   Updated: 2018/06/03 14:36:08 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "video.h"
 #include "game.h"
 
-int main(int argc, char const *argv[])
+t_game *create_game(int allumette, int *obj_used)
 {
-	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_BG0 | DISP_1D_SPRITE ;
+	t_sprite *test;
+	t_list *fioles=NULL;
+	int i=0;
+	t_game *board= NULL;
 
-	int obj_used= 0;
-	setup_game_palet();
-	setup_VRAM();
-	t_game *board;
-
-	board = create_game(5,&obj_used);
-	while (42)
+	board = (t_game*)malloc(sizeof(t_game));
+	while (i < allumette)
 	{
-
-		wait_vblank();
+		setup_sprite(&test,0,0,12,1,1,obj_used);
+		list_push_back(&fioles,test);
+		i = i + 1;
 	}
-	return 0;
+	list_shape(fioles,16,16);
+
+	return(board);
 }

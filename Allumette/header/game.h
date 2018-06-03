@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   game.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/03 13:33:33 by olivier          ###   ########.fr       */
+/*   Created: 2018/06/03 13:16:22 by olivier           #+#    #+#             */
+/*   Updated: 2018/06/03 13:33:02 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef GAME_H
+#define GAME_H
+
 #include "video.h"
-#include "game.h"
+#include "list.h"
+#include "stdlib.h"
 
-int main(int argc, char const *argv[])
+struct s_game
 {
-	REG_DISPLAY = DISP_MODE_0 | DISP_OBJ_MEM | DISP_BG0 | DISP_1D_SPRITE ;
+	t_list *objects;
+	int allumette;
+	int turn;
+};
+typedef struct s_game t_game;
 
-	int obj_used= 0;
-	setup_game_palet();
-	setup_VRAM();
-	t_game *board;
-
-	board = create_game(5,&obj_used);
-	while (42)
-	{
-
-		wait_vblank();
-	}
-	return 0;
-}
+t_game *create_game(int allumette, int *obj_used);
+#endif
