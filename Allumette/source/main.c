@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/03 13:33:33 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/04 14:32:32 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int main(int argc, char const *argv[])
 	setup_VRAM();
 	t_game *board;
 
-	board = create_game(5,&obj_used);
+	board = create_game(3,&obj_used);
+	player_play(board,2);
 	while (42)
 	{
-
 		wait_vblank();
 	}
 	return 0;
