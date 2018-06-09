@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "game.h"
+#include "bot.h"
 
 t_game *create_game(int allumette, int *obj_used)
 {
@@ -22,7 +23,7 @@ t_game *create_game(int allumette, int *obj_used)
 	board = (t_game*)malloc(sizeof(t_game));
 	while (i < allumette)
 	{
-		setup_sprite(&test,0,0,2,0,2,obj_used);
+		setup_sprite(&test,0,0,12,1,1,obj_used);
 		list_push_back(&fioles,test);
 		i = i + 1;
 	}
@@ -31,6 +32,7 @@ t_game *create_game(int allumette, int *obj_used)
 	board->objects = fioles;
 	board->allumette = allumette;
 	board->turn = 1;
+	board->ani = 0;
 	return(board);
 }
 
@@ -45,21 +47,39 @@ void refresh_game(t_game *board)
 	while (list)
 	{
 		tmp = list->data;
-		if (i < board->allumette)
+		if (i < board->allumette + board->ani)
 			set_object_mode(tmp->attribute,0);
 		else
 			set_object_mode(tmp->attribute,10);
 		list = list->next;
 		i++;
 	}
+	board->ani--;
+	if (board->ani < 0)
+		board->ani = 0;
 }
 
 void player_play(t_game *board, int play)
 {
-	if (board->turn > 0)
+	if (board->turn > 0 && board->ani == 0)
 	{
 		board->allumette = board->allumette - play;
 		board->turn = - board->turn;
+		board->ani = play;
+		refresh_game(board);
+	}
+}
+
+void bot_play(t_game *board)
+{
+	int play;
+
+	if (board->turn < 0 && board->ani == 0)
+	{
+		play = bot(board->allumette);
+		board->allumette = board->allumette - play;
+		board->turn = - board->turn;
+		board->ani = play;
 		refresh_game(board);
 	}
 }

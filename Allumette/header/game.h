@@ -22,10 +22,12 @@ struct s_game
 	t_list *objects;
 	int allumette;
 	int turn;
+	int ani;
 };
 typedef struct s_game t_game;
 
 t_game *create_game(int allumette, int *obj_used);
 void player_play(t_game *board, int play);
+void bot_play(t_game *board);
 void refresh_game(t_game *board);
 #endif
