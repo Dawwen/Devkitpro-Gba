@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/04 14:32:07 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/15 23:47:47 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ t_game *create_game(int allumette, int *obj_used)
 	board = (t_game*)malloc(sizeof(t_game));
 	while (i < allumette)
 	{
-		setup_sprite(&test,0,0,12,1,1,obj_used);
+		if (i%2)
+			setup_sprite(&test,0,0,12,1,1,obj_used);
+		else
+			setup_sprite(&test,0,0,16,0,1,obj_used);
 		list_push_back(&fioles,test);
 		i = i + 1;
 	}
