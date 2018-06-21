@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 12:50:01 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/03 12:55:00 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/21 21:27:51 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef tile_4bpp tile_block[512];
 #define oam_mem            ((volatile obj_attrs *)MEM_OAM)
 #define tile_mem           ((volatile tile_block *)MEM_VRAM)
 #define object_palette_mem ((volatile rgb15 *)(MEM_PAL + 0x200))
-//#define bg0_palette_mem		((volatile rgb15 *)(MEM_PAL + 0x200))
 
 #define OBJECT_ATTR0_Y_MASK		0x00FF
 #define	OBJECT_ATTR0_SHAPE_MASK	0xC000

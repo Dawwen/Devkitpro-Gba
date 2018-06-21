@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/15 23:48:38 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/22 01:34:27 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ int main(int argc, char const *argv[])
 	int i=0;
 	setup_game_palet();
 	setup_VRAM();
+	setup_background();
 	t_game *board;
 
 	board = create_game(32,&obj_used);
-	player_play(board,28);
 	while (42)
 	{
 		if (i%30 == 0)

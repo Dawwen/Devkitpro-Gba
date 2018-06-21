@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:50:21 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/03 12:50:17 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/21 21:53:14 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "toolbox.h"
 #include "list.h"
 #include "object.h"
+#include "background.h"
 #include <stdlib.h>
 
 

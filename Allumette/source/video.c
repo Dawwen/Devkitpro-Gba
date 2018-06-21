@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/21 19:37:19 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/21 20:23:20 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "ressource/object/32.data"
 
 #include "ressource/object/palet.bit"
+
 
 volatile unsigned short* scanline_counter = (volatile unsigned short*) 0x4000006;
 

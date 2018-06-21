@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/15 23:47:47 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/22 01:35:09 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_game *create_game(int allumette, int *obj_used)
 		list_push_back(&fioles,test);
 		i = i + 1;
 	}
-	list_shape(fioles,16,16);
+	list_shape(fioles,24,24);
 
 	board->objects = fioles;
 	board->allumette = allumette;
