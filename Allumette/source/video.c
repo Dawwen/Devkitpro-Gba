@@ -6,13 +6,14 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/21 20:23:20 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/24 20:42:24 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "video.h"
 
 #include "ressource/object/num.data"
+#include "ressource/object/numRes.data"
 #include "ressource/object/Fiole_Bleue.data"
 #include "ressource/object/Fiole_Rouge.data"
 #include "ressource/object/32.data"
@@ -41,6 +42,11 @@ void setup_VRAM(void)
 	for (i = 0; i < 4 * (sizeof(tile_4bpp) / 2); ++i)	//Fiole
 	{
 		*start_tile_mem = Fiole_Rouge[i/16][i%16];
+		start_tile_mem++;
+	}
+	for (i = 0; i < 40 * (sizeof(tile_4bpp) / 2); ++i)	//Fiole
+	{
+		*start_tile_mem = numRes[i/16][i%16];
 		start_tile_mem++;
 	}
 	for (i = 0; i < 16*32; ++i)	//depth

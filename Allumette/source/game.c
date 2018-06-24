@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/22 01:35:09 by olivier          ###   ########.fr       */
+/*   Updated: 2018/06/24 20:37:37 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_game *create_game(int allumette, int *obj_used)
 	while (i < allumette)
 	{
 		if (i%2)
-			setup_sprite(&test,0,0,12,1,1,obj_used);
+			setup_sprite(&test,0,0,12,2,1,obj_used);
 		else
 			setup_sprite(&test,0,0,16,0,1,obj_used);
 		list_push_back(&fioles,test);
