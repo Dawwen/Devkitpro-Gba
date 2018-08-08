@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/08 19:11:59 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/08 22:45:31 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 t_game *create_game(int allumette,int *rules, int *obj_used)
 {
 	t_sprite *test;
+
 	t_list *fioles=NULL;
 	int i=0;
 	int* temp;
 	t_game *board= NULL;
 
-	setup_sprite(&(board->cursor),168,24,92,0,2,obj_used);
 
 	board = (t_game*)malloc(sizeof(t_game));
 	while (i < allumette)
@@ -37,8 +37,8 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 
 	board->disp = (t_sprite**)malloc(3*sizeof(t_sprite));
 	setup_sprite(&(board->disp[0]),172,28,20,1,1,obj_used);
-	setup_sprite(&(board->disp[2]),188,60,20,1,1,obj_used);
-	setup_sprite(&(board->disp[1]),204,28,20,1,1,obj_used);
+	setup_sprite(&(board->disp[1]),188,60,20,1,1,obj_used);
+	setup_sprite(&(board->disp[2]),204,28,20,1,1,obj_used);
 
 	i = 0;
 	temp = (int*)malloc(3*sizeof(int));
@@ -48,6 +48,8 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 		set_object_tile((board->disp[i])->attribute,20 + 4 * rules[i]);
 		i++;
 	}
+
+	setup_sprite(&(board->cursor),168,24,92,0,2,obj_used);
 
 	board->select = 0;
 	board->rules = temp;
@@ -104,4 +106,16 @@ void bot_play(t_game *board)
 		board->ani = play;
 		refresh_game(board);
 	}
+}
+
+
+void select_num(t_game *board, int select)
+{
+	board->select = select;
+	if (select == 0)
+		set_object_position((board->cursor)->attribute,168,24);
+	else if (select == 1)
+		set_object_position((board->cursor)->attribute,184,56);
+	else
+		set_object_position((board->cursor)->attribute,200,24);
 }

@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/07 22:03:07 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/08 22:44:52 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int main(int argc, char const *argv[])
 	setup_sprite(&sp,188,60,28,1,1,&obj_used);	//Le nombre 3
 	*/
 
+	select_num(board,1);
+
 	player_play(board,0);
 	while (42)
 	{
@@ -44,7 +46,7 @@ int main(int argc, char const *argv[])
 			refresh_game(board);
 		wait_vblank();
 		i++;
-		if (i == 10)
+		if (i == 30)
 			i = 0;
 	}
 	return 0;

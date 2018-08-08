@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 14:08:32 by olivier           #+#    #+#             */
-/*   Updated: 2018/02/24 14:08:33 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/08 22:47:55 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,5 @@ typedef volatile unsigned int   vuint32;
 static inline int clamp(int value, int min, int max)
 {
 	return (value < min ? min
-	                    : (value > max ? max : value));
+					: (value > max ? max : value));
 }
