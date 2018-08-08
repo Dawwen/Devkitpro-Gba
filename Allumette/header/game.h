@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:16:22 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/07 13:42:56 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/08 13:36:52 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 
 struct s_game
 {
-	t_sprite** 	disp;
 	t_list* 	objects;
+	t_sprite** 	disp;
+	t_sprite*	cursor;
+	int			select;
 	int 		allumette;
 	int			*rules;
 	int 		turn;

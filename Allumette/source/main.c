@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/07 16:04:20 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/07 22:03:07 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,18 @@ int main(int argc, char const *argv[])
 	setup_background();
 
 
-	board = create_game(6,rules,&obj_used);
+	board = create_game(8,rules,&obj_used);
 
-	/*setup_sprite(&sp,172,28,24,1,1,&obj_used);	//Le nombre 1
+	/*
+	setup_sprite(&sp,172,28,24,1,1,&obj_used);	//Le nombre 1
 	setup_sprite(&sp,204,28,32,1,1,&obj_used);	//Le nombre 2
 	setup_sprite(&sp,188,60,28,1,1,&obj_used);	//Le nombre 3
 	*/
 
-	player_play(board,5);
+	player_play(board,0);
 	while (42)
 	{
+		bot_play(board);
 		if (i%30 == 0)
 			refresh_game(board);
 		wait_vblank();

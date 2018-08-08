@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/14 13:23:49 by olivier           #+#    #+#             */
-/*   Updated: 2018/03/21 13:32:12 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/07 22:00:35 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@
 
 dico *result=NULL;
 
-int	rec(int allu, int myTurn)
+int	rec(int allu,int* rules, int myTurn)
 {
-	int i = 1;
+	int i = 0;
 	int check = get_data(&result,allu);
 	int value;
 
@@ -36,10 +36,10 @@ int	rec(int allu, int myTurn)
 
 	if (myTurn)
 	{
-		while (i < 4)
+		while (i < 3)
 		{
-			value =rec(allu-i,!myTurn);
-			set_data(&result,allu-i,-value);
+			value =rec(allu-rules[i],rules,!myTurn);
+			set_data(&result,allu-rules[i],-value);
 			if (value == WIN)
 				return(WIN);
 			i++;
@@ -48,10 +48,10 @@ int	rec(int allu, int myTurn)
 	}
 	else
 	{
-		while (i < 4)
+		while (i < 3)
 		{
-			value =rec(allu-i,!myTurn);
-			set_data(&result,allu-i,value);
+			value =rec(allu-rules[i],rules,!myTurn);
+			set_data(&result,allu-rules[i],value);
 			if (value == LOST)
 				return(LOST);
 			i++;
@@ -60,14 +60,14 @@ int	rec(int allu, int myTurn)
 	}
 }
 
-int	bot(int allu)
+int	bot(int allu,int* rules)
 {
-	int i = 1;
-	while (i < 4)
+	int i = 0;
+	while (i < 3)
 	{
-		if (rec(allu - i, 0) == 1)
+		if (rec(allu - rules[i], rules, 0) == 1)
 			return(i);
 		i += 1;
 	}
-	return(1);
+	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/07 13:48:52 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/08 19:11:59 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 	int i=0;
 	int* temp;
 	t_game *board= NULL;
+
+	setup_sprite(&(board->cursor),168,24,92,0,2,obj_used);
 
 	board = (t_game*)malloc(sizeof(t_game));
 	while (i < allumette)
@@ -47,6 +49,7 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 		i++;
 	}
 
+	board->select = 0;
 	board->rules = temp;
 	board->objects = fioles;
 	board->allumette = allumette;
@@ -82,7 +85,7 @@ void player_play(t_game *board, int play)
 {
 	if (board->turn > 0 && board->ani == 0)
 	{
-		board->allumette = board->allumette - play;
+		board->allumette = board->allumette - (board->rules)[play];
 		board->turn = - board->turn;
 		board->ani = play;
 		refresh_game(board);
@@ -95,8 +98,8 @@ void bot_play(t_game *board)
 
 	if (board->turn < 0 && board->ani == 0)
 	{
-		play = bot(board->allumette);
-		board->allumette = board->allumette - play;
+		play = bot(board->allumette,board->rules);
+		board->allumette = board->allumette - (board->rules)[play];
 		board->turn = - board->turn;
 		board->ani = play;
 		refresh_game(board);
