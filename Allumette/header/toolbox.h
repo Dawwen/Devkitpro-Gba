@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 14:08:32 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/08 22:47:55 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/20 19:16:15 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,3 @@ typedef unsigned int   uint32;
 typedef volatile unsigned char  vuint8;
 typedef volatile unsigned short vuint16;
 typedef volatile unsigned int   vuint32;
-
-// Clamp 'value' in the range 'min' to 'max' (inclusive)
-static inline int clamp(int value, int min, int max)
-{
-	return (value < min ? min
-					: (value > max ? max : value));
-}

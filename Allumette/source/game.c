@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/08 22:45:31 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/24 19:15:22 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 	board->objects = fioles;
 	board->allumette = allumette;
 	board->turn = 1;
-	board->ani = 0;
+	board->ani = -1;
 	return(board);
 }
 
@@ -66,30 +66,33 @@ void refresh_game(t_game *board)
 	t_sprite *tmp;
 
 	int i=0;
+	int temp=0;
+
+	if (board->ani >= 0)	//Pour evite probleme d'animation au changement de tour
+		temp = board->ani;
 
 	list = board->objects;
 	while (list)
 	{
 		tmp = list->data;
-		if (i < board->allumette + board->ani)
+		if (i < board->allumette + temp)
 			set_object_mode(tmp->attribute,0);
 		else
 			set_object_mode(tmp->attribute,2);
 		list = list->next;
 		i++;
 	}
-	board->ani--;
-	if (board->ani < 0)
-		board->ani = 0;
+	if (board->ani > -1)
+		board->ani--;
 }
 
-void player_play(t_game *board, int play)
+void player_play(t_game *board)
 {
-	if (board->turn > 0 && board->ani == 0)
+	if (board->turn > 0 && board->ani < 0)
 	{
-		board->allumette = board->allumette - (board->rules)[play];
+		board->allumette = board->allumette - (board->rules)[board->select];
 		board->turn = - board->turn;
-		board->ani = play;
+		board->ani = (board->rules)[board->select];
 		refresh_game(board);
 	}
 }
@@ -98,12 +101,12 @@ void bot_play(t_game *board)
 {
 	int play;
 
-	if (board->turn < 0 && board->ani == 0)
+	if (board->turn < 0 && board->ani < 0)
 	{
 		play = bot(board->allumette,board->rules);
 		board->allumette = board->allumette - (board->rules)[play];
 		board->turn = - board->turn;
-		board->ani = play;
+		board->ani = (board->rules)[play];
 		refresh_game(board);
 	}
 }

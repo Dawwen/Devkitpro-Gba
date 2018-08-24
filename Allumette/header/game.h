@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:16:22 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/08 22:48:31 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/21 19:49:33 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ struct s_game
 typedef struct s_game t_game;
 
 t_game *create_game(int allumette,int *rules, int *obj_used);
-void player_play(t_game *board, int play);
+void player_play(t_game *board);
 void bot_play(t_game *board);
 void refresh_game(t_game *board);
 void select_num(t_game *board, int select);
