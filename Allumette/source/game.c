@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/24 19:15:22 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/26 18:14:41 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 	}
 	list_shape(fioles,24,24);
 
-	board->disp = (t_sprite**)malloc(3*sizeof(t_sprite));
+	board->disp = (t_sprite**)malloc(3*sizeof(t_sprite*));
 	setup_sprite(&(board->disp[0]),172,28,20,1,1,obj_used);
 	setup_sprite(&(board->disp[1]),188,60,20,1,1,obj_used);
 	setup_sprite(&(board->disp[2]),204,28,20,1,1,obj_used);
@@ -51,6 +51,14 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 
 	setup_sprite(&(board->cursor),168,24,92,0,2,obj_used);
 
+	setup_sprite(&(board->player),16,112,108,0,2,obj_used);
+	set_object_shape((board->player)->attribute,1);
+
+	board->score = (t_sprite**)malloc(2*sizeof(t_sprite*));
+	setup_sprite(&(board->score[0]),16,138,20,1,1,obj_used);
+	setup_sprite(&(board->score[1]),32,138,20,1,1,obj_used);
+
+
 	board->select = 0;
 	board->rules = temp;
 	board->objects = fioles;
@@ -58,6 +66,16 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 	board->turn = 1;
 	board->ani = -1;
 	return(board);
+}
+
+void refresh_score(t_game *board)
+{
+	int temp = board->allumette;
+	if (board->ani >= 0)
+		temp = temp + board->ani;
+
+	set_object_tile((board->score[0])->attribute,20 + 4*(temp/10));
+	set_object_tile((board->score[1])->attribute,20 + 4*(temp%10));
 }
 
 void refresh_game(t_game *board)
@@ -71,6 +89,14 @@ void refresh_game(t_game *board)
 	if (board->ani >= 0)	//Pour evite probleme d'animation au changement de tour
 		temp = board->ani;
 
+	if (board->ani == -2)
+	{
+		if (board->turn == 1)
+			set_object_tile(board->player->attribute,108);
+		else
+			set_object_tile(board->player->attribute,116);
+	}
+
 	list = board->objects;
 	while (list)
 	{
@@ -82,13 +108,14 @@ void refresh_game(t_game *board)
 		list = list->next;
 		i++;
 	}
-	if (board->ani > -1)
+	refresh_score(board);
+	if (board->ani > -3)
 		board->ani--;
 }
 
 void player_play(t_game *board)
 {
-	if (board->turn > 0 && board->ani < 0)
+	if (board->turn > 0 && board->ani < -2)
 	{
 		board->allumette = board->allumette - (board->rules)[board->select];
 		board->turn = - board->turn;
@@ -101,7 +128,7 @@ void bot_play(t_game *board)
 {
 	int play;
 
-	if (board->turn < 0 && board->ani < 0)
+	if (board->turn < 0 && board->ani < -2)
 	{
 		play = bot(board->allumette,board->rules);
 		board->allumette = board->allumette - (board->rules)[play];
