@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/26 18:14:41 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/28 13:01:01 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,9 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 	setup_sprite(&(board->score[0]),16,138,20,1,1,obj_used);
 	setup_sprite(&(board->score[1]),32,138,20,1,1,obj_used);
 
+	setup_sprite(&(board->win),64,48,132,0,2,obj_used);
+	set_object_shape((board->win)->attribute,1);
+	set_object_mode((board->win)->attribute,2);
 
 	board->select = 0;
 	board->rules = temp;
@@ -65,7 +68,27 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 	board->allumette = allumette;
 	board->turn = 1;
 	board->ani = -1;
+	board->end = 0;
 	return(board);
+}
+
+void refresh_game(t_game *board)
+{
+	refresh_player(board);
+	refresh_allumette(board);
+	refresh_score(board);
+
+	if (board->ani == -2 && board->allumette < (board->rules)[0])
+	{
+		board->end = -board->turn;
+		if (board->end == 1)
+			set_object_tile((board->win)->attribute,124);
+		else
+			set_object_tile((board->win)->attribute,132);
+		set_object_mode((board->win)->attribute,0);
+	}
+	if (board->ani > -3)
+		board->ani--;
 }
 
 void refresh_score(t_game *board)
@@ -78,24 +101,14 @@ void refresh_score(t_game *board)
 	set_object_tile((board->score[1])->attribute,20 + 4*(temp%10));
 }
 
-void refresh_game(t_game *board)
+void refresh_allumette(t_game *board)
 {
 	t_list *list;
 	t_sprite *tmp;
-
-	int i=0;
-	int temp=0;
+	int i=0, temp=0;
 
 	if (board->ani >= 0)	//Pour evite probleme d'animation au changement de tour
 		temp = board->ani;
-
-	if (board->ani == -2)
-	{
-		if (board->turn == 1)
-			set_object_tile(board->player->attribute,108);
-		else
-			set_object_tile(board->player->attribute,116);
-	}
 
 	list = board->objects;
 	while (list)
@@ -108,19 +121,27 @@ void refresh_game(t_game *board)
 		list = list->next;
 		i++;
 	}
-	refresh_score(board);
-	if (board->ani > -3)
-		board->ani--;
+}
+
+void refresh_player(t_game *board)
+{
+	if (board->ani == -2)
+	{
+		if (board->turn == 1)
+			set_object_tile(board->player->attribute,108);
+		else
+			set_object_tile(board->player->attribute,116);
+	}
 }
 
 void player_play(t_game *board)
 {
-	if (board->turn > 0 && board->ani < -2)
+	int play = (board->rules)[board->select];
+	if (board->turn > 0 && board->ani < -2 && board->allumette >= play )
 	{
-		board->allumette = board->allumette - (board->rules)[board->select];
+		board->allumette = board->allumette - play;
 		board->turn = - board->turn;
 		board->ani = (board->rules)[board->select];
-		refresh_game(board);
 	}
 }
 
@@ -130,11 +151,13 @@ void bot_play(t_game *board)
 
 	if (board->turn < 0 && board->ani < -2)
 	{
-		play = bot(board->allumette,board->rules);
-		board->allumette = board->allumette - (board->rules)[play];
-		board->turn = - board->turn;
-		board->ani = (board->rules)[play];
-		refresh_game(board);
+		play = (board->rules)[bot(board->allumette,board->rules)];
+		if (board->allumette >= play)
+		{
+			board->allumette = board->allumette - play;
+			board->turn = - board->turn;
+			board->ani = play;
+		}
 	}
 }
 

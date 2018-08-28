@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/26 14:19:00 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/27 22:28:28 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include "ressource/object/32.data"
 #include "ressource/object/cursor.data"
 #include "ressource/object/player.data"
+#include "ressource/object/win.data"
 
 
 #include "ressource/object/palet.bit"
@@ -67,7 +68,11 @@ void setup_VRAM(void)
 		*start_tile_mem = player[i/16][i%16];
 		start_tile_mem++;
 	}
-
+	for (i = 0; i < 16*16; ++i)	//depth
+	{
+		*start_tile_mem = win[i/16][i%16];
+		start_tile_mem++;
+	}
 }
 
 void setup_sprite_att(volatile obj_attrs *attribute,uint16 start_tile,int palet,int size)

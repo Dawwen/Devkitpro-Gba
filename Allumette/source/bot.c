@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/14 13:23:49 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/07 22:00:35 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/28 12:44:18 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	rec(int allu,int* rules, int myTurn)
 	int check = get_data(&result,allu);
 	int value;
 
-	if (allu <= 0)
+	if (allu < rules[0])
 		return((myTurn) ? LOST : WIN);
 
 	if (check != 0)
