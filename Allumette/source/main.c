@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/19 17:45:54 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/29 19:25:37 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 19:42:31 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int main(int argc, char const *argv[])
 	setup_background();
 
 	game_main(15,rules,&obj_used);
-	game_main(20,rules,&obj_used);
-
+	
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/14 13:23:49 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/28 12:44:18 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 19:39:52 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,10 @@ int	bot(int allu,int* rules)
 		i += 1;
 	}
 	return(0);
+}
+
+void bot_clear(void)
+{
+	clear_dico(result);
+	result = NULL;
 }

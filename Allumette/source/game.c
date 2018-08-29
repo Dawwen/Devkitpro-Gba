@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/29 19:26:05 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 19:41:50 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ void clear_board(t_game *board)
 	clear_sprite((board->disp)[1]);
 	clear_sprite((board->disp)[2]);
 	free(board->disp);
+
+	bot_clear();
 
 	free(board);
 }

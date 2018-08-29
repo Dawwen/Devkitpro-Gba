@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/20 19:47:57 by olivier           #+#    #+#             */
-/*   Updated: 2018/03/21 13:31:24 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 19:40:40 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,16 @@ void add_empty_node(dico** list, int lenght)
 		i++;
 	}
 	push_back(list,data,lenght);
+}
+
+void clear_dico(dico *lst)
+{
+	dico *tmp;
+	while (lst)
+	{
+		tmp = lst->next;
+		free(lst->data);
+		free(lst);
+		lst = tmp;
+	}
 }
