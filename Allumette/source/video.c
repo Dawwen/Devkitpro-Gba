@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:49:19 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/27 22:28:28 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 11:59:33 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,4 +173,17 @@ void setup_game_palet(void)
 {
 	setup_palet(object_palette_mem,player_palet,256,0);
 	//setup_palet(bg_palette,background_palette,256,0);
+}
+
+void clear_sprite(t_sprite *sprite)
+{
+	clear_attribute(sprite->attribute);
+	free(sprite);
+}
+
+void clear_attribute(volatile obj_attrs *attribute)
+{
+	attribute->attr0 = 0;
+	attribute->attr1 = 0;
+	attribute->attr2 = 0;
 }

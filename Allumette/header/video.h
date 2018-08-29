@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/21 20:50:21 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/21 21:53:14 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 19:19:22 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,8 @@ void list_shape(t_list *list, int x, int y);
 t_list *list_line(t_list *list, int x, int y, int max);
 void setup_game_palet(void);
 void setup_VRAM(void);
+void clear_sprite(t_sprite *sprite);
+void clear_attribute(volatile obj_attrs *attribute);
+void game_main(int allumette, int *rules, int *obj_used);
 
 #endif

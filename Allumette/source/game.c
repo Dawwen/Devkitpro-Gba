@@ -6,12 +6,13 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/28 13:01:01 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 19:26:05 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
 #include "bot.h"
+#include "input.h"
 
 t_game *create_game(int allumette,int *rules, int *obj_used)
 {
@@ -74,11 +75,21 @@ t_game *create_game(int allumette,int *rules, int *obj_used)
 
 void refresh_game(t_game *board)
 {
+	refresh_score(board);
+	if (board->end == 0)
+	{
 	refresh_player(board);
 	refresh_allumette(board);
-	refresh_score(board);
+	check_end(board);
 
-	if (board->ani == -2 && board->allumette < (board->rules)[0])
+	if (board->ani > -3)
+		board->ani--;
+	}
+}
+
+void check_end(t_game *board)
+{
+	if (board->ani == -2 && board->allumette < (board->rules)[0] && board->end == 0)
 	{
 		board->end = -board->turn;
 		if (board->end == 1)
@@ -87,9 +98,8 @@ void refresh_game(t_game *board)
 			set_object_tile((board->win)->attribute,132);
 		set_object_mode((board->win)->attribute,0);
 	}
-	if (board->ani > -3)
-		board->ani--;
 }
+
 
 void refresh_score(t_game *board)
 {
@@ -171,4 +181,61 @@ void select_num(t_game *board, int select)
 		set_object_position((board->cursor)->attribute,184,56);
 	else
 		set_object_position((board->cursor)->attribute,200,24);
+}
+
+void clear_board(t_game *board)
+{
+	clear_list(board->objects,clear_sprite);
+	clear_sprite(board->cursor);
+	clear_sprite(board->player);
+	clear_sprite(board->win);
+
+	clear_sprite((board->score)[0]);
+	clear_sprite((board->score)[1]);
+	free(board->score);
+
+	clear_sprite((board->disp)[0]);
+	clear_sprite((board->disp)[1]);
+	clear_sprite((board->disp)[2]);
+	free(board->disp);
+
+	free(board);
+}
+
+void game_main(int allumette, int *rules, int *obj_used)
+{
+	int i=0;
+	t_game *board;
+
+	board = create_game(allumette,rules,obj_used);
+	while (board->end != 2)
+	{
+		bot_play(board);
+
+		if (key_hit(KEY_RIGHT) && board->select != 2)
+		{
+			board->select = board->select + 1;
+			select_num(board,board->select);
+		}
+		if (key_hit(KEY_LEFT) && board->select != 0)
+		{
+			board->select = board->select - 1;
+			select_num(board,board->select);
+		}
+
+		if (key_hit(KEY_A))
+			player_play(board);
+
+		if (key_hit(KEY_SELECT) && board->end != 0)
+			board->end = 2;
+
+		if (i == 60)
+			i = 0;
+		if (i%15 == 0)
+			refresh_game(board);
+		i++;
+		wait_vblank();
+		key_poll();
+	}
+	clear_board(board);
 }

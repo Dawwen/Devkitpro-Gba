@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 11:40:10 by olivier           #+#    #+#             */
-/*   Updated: 2018/04/01 10:55:39 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/29 15:59:58 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,16 @@ int	list_size(t_list *begin_list)
 		list = list->next;
 	}
 	return (i);
+}
+
+void clear_list(t_list *list, void f(void*))
+{
+	t_list *temp= list;
+	while (list)
+	{
+		temp = list->next;
+		f(list->data);
+		free(list);
+		list = temp;
+	}
 }
