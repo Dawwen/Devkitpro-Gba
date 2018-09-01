@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/21 20:18:51 by olivier           #+#    #+#             */
-/*   Updated: 2018/06/21 21:57:01 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/30 19:40:55 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 #include "ressource/background/background.h"
 
 /* include the tile map we are using */
-#include "ressource/background/map.h"
+#include "ressource/background/game_map.h"
+#include "ressource/background/select_map.h"
 
 volatile unsigned short* bg0_control = (volatile unsigned short*) 0x4000008;
 volatile unsigned short* bg1_control = (volatile unsigned short*) 0x400000a;
@@ -60,9 +61,24 @@ void setup_background() {
 		(1 << 13) |		/* wrapping flag */
 		(0 << 14);		/* bg size, 0 is 256x256 */
 
+	*bg1_control = 0 |	/* priority, 0 is highest, 3 is lowest */
+		(3 << 2)  |		/* the char block the image data is stored in */
+		(0 << 6)  |		/* the mosaic flag */
+		(1 << 7)  |		/* color mode, 0 is 16 colors, 1 is 256 colors */
+		(1 << 8) |		/* the screen block the tile data is stored in */
+		(1 << 13) |		/* wrapping flag */
+		(0 << 14);		/* bg size, 0 is 256x256 */
+
 	/* load the tile data into screen block 16 */
 	dest = screen_block(0);	//La map
-	for (int i = 0; i < (map_width * map_height); i++) {
-		dest[i] = map[i];
+	for (int i = 0; i < (game_map_width * game_map_height); i++)
+	{
+		dest[i] = game_map[i];
+	}
+
+	dest = screen_block(1);	//La map
+	for (int i = 0; i < (select_map_width * select_map_height); i++)
+	{
+		dest[i] = select_map[i];
 	}
 }/* the control registers for the four tile layers */

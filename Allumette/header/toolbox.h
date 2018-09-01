@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/24 14:08:32 by olivier           #+#    #+#             */
-/*   Updated: 2018/08/20 19:16:15 by olivier          ###   ########.fr       */
+/*   Updated: 2018/08/30 19:51:31 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 #define DISP_OBJ_MEM	0x1000
 #define DISP_1D_SPRITE	0x0040
 #define DISP_BG0		0x0100
+#define DISP_BG1		0x0200
 
 #define REG_DISPLAY			(*((volatile uint32 *)(MEM_IO)))
 #define REG_DISPLAY_VCOUNT	(*((volatile uint32 *)(MEM_IO + 0x0006)))
