@@ -6,7 +6,7 @@
 /*   By: olivier <olivier@doussaud.org>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/03 13:03:41 by olivier           #+#    #+#             */
-/*   Updated: 2018/09/01 18:14:04 by olivier          ###   ########.fr       */
+/*   Updated: 2018/09/01 19:55:54 by olivier          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,7 +201,7 @@ void select_num_game(t_game *board, int select)
 
 void clear_board(t_game *board, int *obj_used)
 {
-	clear_list(board->objects,clear_sprite);
+	clear_list(board->objects,(void (*)(void *))clear_sprite);
 	clear_sprite(board->cursor);
 	clear_sprite(board->player);
 	clear_sprite(board->win);
